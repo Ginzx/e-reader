@@ -7,14 +7,6 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
     <context:component-scan base-package="com.slsd.controller" />
 
-    <!-- 配置SpringMVC拦截器 -->
-
-    <mvc:interceptors>
-        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
-        <bean class="com.slsd.interceptor.LoginInterceptor" />
-        <bean class="com.slsd.interceptor.PermisInterceptor" />
-    </mvc:interceptors>
-
     <!--设置配置方案 -->
     <!-- 会自动注册RequestMappingHandlerMapping与RequestMappingHandlerAdapter两个Bean,
         这是Spring MVC为@Controller分发请求所必需的，并且提供了数据绑定支持 -->
