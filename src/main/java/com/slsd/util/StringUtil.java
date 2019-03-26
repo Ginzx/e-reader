@@ -1,6 +1,5 @@
 package com.slsd.util;
 
-import com.alibaba.dubbo.common.utils.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -183,38 +182,6 @@ public class StringUtil {
 				|| ((codePoint >= 0x10000) && (codePoint <= 0x10FFFF));
 	}
 
-	/**
-	 * 过滤emoji 或者 其他非文字类型的字符
-	 *
-	 * @param source
-	 * @return
-	 */
-	public static String filterEmoji(String source) {
-		if (StringUtils.isBlank(source)) {
-			return source;
-		}
-		StringBuilder buf = null;
-		int len = source.length();
-		for (int i = 0; i < len; i++) {
-			char codePoint = source.charAt(i);
-			if (isEmojiCharacter(codePoint)) {
-				if (buf == null) {
-					buf = new StringBuilder(source.length());
-				}
-				buf.append(codePoint);
-			}
-		}
-		if (buf == null) {
-			return source;
-		} else {
-			if (buf.length() == len) {
-				buf = null;
-				return source;
-			} else {
-				return buf.toString();
-			}
-		}
-	}
 	
 	public static void main(String[] args) {
 		System.out.println(isNum(""));
