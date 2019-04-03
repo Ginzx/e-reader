@@ -8,13 +8,13 @@ public class Manager implements Serializable {
 
 	private static final long serialVersionUID = -8878337478034276751L;
 
-	private Integer mId;
-	private String account;
-	private String name;
-	private String pwd;
-	private Integer status;
-	private Date createTime;
-	private Date modifyTime;
+	private Integer mId; //管理员编号
+	private String account;//管理员账号
+	private String name; //管理员姓名
+	private String pwd;  //管理员密码
+	private Integer status; //管理员账号状态
+	private Date createTime; //创建时间
+	private Date modifyTime;//修改时间
 
 	public Integer getmId() {
 		return mId;
