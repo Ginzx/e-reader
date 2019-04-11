@@ -1,0 +1,110 @@
+@charset "utf-8";
+/*排序图标——start*/
+table.tablesorter thead tr .header {
+	background-image: url(../images/bg.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+
+table.tablesorter thead tr .headerSortUp {
+	background-image: url(../images/asc.gif);
+}
+
+table.tablesorter thead tr .headerSortDown {
+	background-image: url(../images/desc.gif);
+}
+
+/*排序图标——end*/
+
+div.firstdiv{
+	color:gray; margin:0 auto;width:500px;border:#f3f3f3 1px solid;display:none;margin-bottom:20px;
+}
+.coverUrl{
+	display:inline; float:left ; padding:0 20px 0 5px
+}
+hr{
+	height:1px;border:none;border-top:1px solid #ccc;
+}
+.chapter{
+	padding:1px 20px 1px 20px; background:#e0e0e0;color:black;margin:5px 0;
+}
+#contentTd{
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+
+
+
+/*排序图标——end*/
+
+/*logo上传——start*/
+.logo-upload-container {
+    color: #838383;
+    font-size: 12px;
+    background-color: #FFF;
+    border: solid 1px #ddd;
+}
+
+.logo-upload-container .place {
+    border: 3px dashed #e6e6e6;
+    min-height: 80px;
+    text-align: center;
+    color: #cccccc;
+    font-size: 14px;
+    position: relative;
+}
+/*logo上传——end*/
+
+/*图片选择——start*/
+ul.thumbnails.image_picker_selector {
+	overflow: auto;
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+ul.thumbnails.image_picker_selector ul {
+	overflow: auto;
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+ul.thumbnails.image_picker_selector li.group_title {
+	float: none;
+}
+
+ul.thumbnails.image_picker_selector li {
+	margin: 0px 12px 12px 0px;
+	float: left;
+	position:relative;
+}
+
+ul.thumbnails.image_picker_selector li .thumbnail {
+	padding: 6px;
+	border: 1px solid #dddddd;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	height:440px;
+}
+
+ul.thumbnails.image_picker_selector li .thumbnail img {
+	-webkit-user-drag: none;
+	max-width:170px;
+}
+
+ul.thumbnails.image_picker_selector li .thumbnail.selected {
+	border: 1px solid #0088cc;
+}
+/*图片选择——end*/
+.btn-success { color: #fff; background-color: #5090fc; border-color: #5090fc;}
+.btn-success:hover{background:#448aff;border-color:#448aff;}
+.label-success, .badge-success {background-color: #448aff;}	

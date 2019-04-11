@@ -14,6 +14,7 @@ public class Feature implements Serializable {
 	private Integer fId;//功能模块id
 	private String fName;//功能模块名称
 	private Integer parent_id;//父类功能模块id
+	private String parentAdress;//功能所在地址
 	private List<Feature> features;//子类功能列表
 
 	@Override
@@ -24,6 +25,14 @@ public class Feature implements Serializable {
 				", parent_id=" + parent_id +
 				", features=" + features +
 				'}';
+	}
+
+	public String getParentAdress() {
+		return parentAdress;
+	}
+
+	public void setParentAdress(String parentAdress) {
+		this.parentAdress = parentAdress;
 	}
 
 	public Integer getParent_id() {

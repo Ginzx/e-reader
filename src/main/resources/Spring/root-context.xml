@@ -13,10 +13,10 @@
     <!-- 数据库连接池 -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
         <!-- 基本属性 url、user、password -->
+        <property name="driverClassName" value="${jdbc.driver}" />
         <property name="url" value="${jdbc.url}" />
         <property name="username" value="${jdbc.username}" />
         <property name="password" value="${jdbc.password}" />
-        <property name="connectionProperties" value="config.decrypt=true" />
     </bean>
 
     <!-- 配置 Spirng 的 JdbcTemplate -->

@@ -35,6 +35,16 @@ public class FeatureServiceimpl implements FeatureService {
 	}
 
 	@Override
+	public List<Feature> SelectMangerfeatureF(Integer mid) {
+		return featureDao.SelectMangerfeatureF(mid);
+	}
+
+	@Override
+	public List<Feature> SelectManagerFeatureS(Integer mid, Integer parentid) {
+		return featureDao.SelectManagerFeatureS(mid, parentid);
+	}
+
+	@Override
 	public boolean EditFeature(Feature feature) {
 		return featureDao.EditFeature(feature);
 	}
@@ -42,5 +52,15 @@ public class FeatureServiceimpl implements FeatureService {
 	@Override
 	public boolean Delfeature(Integer fId) {
 		return featureDao.Delfeature(fId);
+	}
+
+	@Override
+	public boolean addManagerFeature(Integer mid, Integer fid) {
+		return addManagerFeature(mid, fid);
+	}
+
+	@Override
+	public boolean delManagerFeature(Integer mid) {
+		return delManagerFeature(mid);
 	}
 }

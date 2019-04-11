@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jQuery图片循环轮播效果</title>
+<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+<div id="loopedSlider">	
+	<div class="container">
+		<a href="#" class="previous"><</a>
+		<div id="sliders_box">
+			<div class="slides">
+				<div><img src="" alt="First Image" /></div>
+				<div><img src="" alt="Second Image" /></div>
+				<div><img src="" alt="Third Image" /></div>
+				<div><img src="" alt="First Image" /></div>
+			</div>
+		</div>
+		<a href="#" class="next">></a>
+	</div>
+</div>
+<div class="model_box">
+	<img src="" alt="">
+</div>
+<script src="js/index.js"></script>
+<script type="text/javascript" charset="utf-8">
+	$(function(){
+		$('#loopedSlider').loopedSlider();
+	});
+</script>
+</body>
+</html>

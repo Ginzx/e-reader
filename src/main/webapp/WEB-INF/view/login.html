@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="${request.contextPath}/lib/html5.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/lib/respond.min.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/lib/PIE_IE678.js"></script>
+    <![endif]-->
+    <link href="${request.contextPath}/css/H-ui.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="${request.contextPath}/css/H-ui.login.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="${request.contextPath}/css/style.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="${request.contextPath}/lib/Hui-iconfont/1.0.1/iconfont.css"
+          rel="stylesheet" type="text/css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>阅读平台管理系统</title>
+</head>
+<body>
+<input type="hidden" id="TenantId" name="TenantId" value=""/>
+
+<div class="header">
+    <div>&nbsp;</div>
+</div>
+
+<div class="loginWraper">
+    <img src="images/login/loginIcon.png" class="loginIcon"/>
+    <div class="loginBox">
+        <form class="form form-horizontal"
+              action="${request.contextPath}/login.html" method="post"
+              id="loginForm" onsubmit="check()">
+            <p>阅读平台管理系统</p>
+            <div class="row cl">
+                <label class="form-label col-3"><i class="Hui-iconfont"><img class="user"
+                                                                             src="images/login/user.png"></i></label>
+                <div class="formControls col-8">
+                    <input id="account" name="account" type="text" placeholder="帐号"
+                           class="input-text size-L" datatype="*2-32" nullmsg="帐号不能为空">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-3"><i class="Hui-iconfont"><img class="pwd" src="images/login/pwd.png"></i></label>
+                <div class="formControls col-8">
+                    <input id="pwd" name="pwd" type="password" placeholder="密码"
+                           class="input-text size-L" datatype="*2-16" nullmsg="密码不能为空">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-3"><i class="Hui-iconfont"><img class="smsCode"
+                                                                             src="images/login/smsCode.png"></i></label>
+                <div class="formControls col-8">
+                    <input id="smscode" name="smscode" datatype="*" placeholder="验证码"
+                           class="input-smscode input-text size-L" type="text" nullmsg="验证码不能为空"/>
+                    <img src="${request.contextPath}/getRand.html" id="randCode" alt="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="formControls col-8 col-offset-3">
+                    <input name="" type="submit" class="btn btn-success radius size-L"
+                           value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">
+                </div>
+            </div>
+        </form>
+        <img src="images/login/back2.png" class="back2"/>
+    </div>
+</div>
+<script type="text/javascript"
+        src="${request.contextPath}/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/lib/H-ui.js"></script>
+<script type="text/javascript" src="${request.contextPath}/lib/layer/layer.js"></script>
+<script type="text/javascript" src="${request.contextPath}/lib/jquery.cookie.js"></script>
+<script type="text/javascript" src="${request.contextPath}/lib/Validform/5.3.2/Validform.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/lib/jquery.form.js"></script>
+<script type="text/javascript" src="${request.contextPath}/lib/jquery.md5.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/common.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/login.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        validSubmitForm2('loginForm', 'index.html');
+
+        function validSubmitForm2(formId, url) {
+            $('#' + formId).Validform({
+                tiptype: 2,
+                ajaxPost: true,
+                beforeSubmit: function (form) {
+                    var index = layer.load(0, {shade: false});
+
+                    var options = {
+                        success: function (e) {
+                            layer.close(index);
+                            layer.msg(e.msg);
+                            if (e.code == 200) {
+                                window.location.href = url;
+                            } else {
+                                var now = new Date();
+                                $("#randCode").attr("src", "${request.contextPath}/getRand.html?time=" + now.getTime());
+                            }
+                        },
+                        error: function (e) {
+                            layer.close(index);
+                            layer.msg('请求失败');
+                        }
+                    };
+                    $(form[0]).ajaxSubmit(options);
+                    return false;
+                }
+            });
+        }
+
+        $("#randCode").on("click", function () {
+            var now = new Date();
+            $("#randCode").attr("src", "${request.contextPath}/getRand.html?time=" + now.getTime());
+        });
+
+    });
+
+    function check() {
+        var count = $("#account").val().length;
+        if (count > 32 || count < 2) {
+            layer.msg("账号请输入2-32位字符");
+            return false;
+        }
+    }
+
+</script>
+</body>
+</html>
