@@ -1,0 +1,115 @@
+@var head = {
+	<title>用户管理-修改用户</title>
+@};
+@var content = {
+	<div class="pd-20">
+		<form action="${request.contextPath}/manage/update.html?mid=${manager.mId}" method="post" class="form form-horizontal" id="updateForm">
+			<input type="hidden" class="input-text" value="0" id="flag" name="flag">
+			<div class="row cl">
+				<label class="form-label col-3">帐号：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text disabled" readonly="true" value="${manager.account}" id="account" name="account">
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			@if(flag!'0'==1){
+			<div class="row cl">
+				<label class="form-label col-3">密码：</label>
+				<div class="formControls col-5">
+					<input class="btn btn-primary radius" id="changePwd" type="button" value="&nbsp;&nbsp;修改密码&nbsp;&nbsp;">
+					<input class="btn btn-primary radius" id="cancel" type="button" value="&nbsp;&nbsp;取消修改&nbsp;&nbsp;">
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl" id="newPwd" style ="display:none">
+				<label class="form-label col-3"><span class="c-red">*</span>新密码：</label>
+				<div class="formControls col-5">
+					<input type="password" class="input-text"  placeholder="输入密码" id="pwd" name="pwd" datatype="*0-32" nullmsg="密码不能为空且不含空格">
+					<input id="enPwd" name="enPwd" type="password" value="" style="display: none">
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl" id="sureNewPwd" style ="display:none">
+				<label class="form-label col-3"><span class="c-red">*</span>确认新密码：</label>
+				<div class="formControls col-5">
+					<input type="password" class="input-text"  placeholder="输入确认密码" id="pwd2" name="pwd2" recheck="pwd" datatype="*0-32" nullmsg="确认密码不能为空且不含空格" errormsg="两次输入的密码不一致！">
+					<input id="enPwd1" name="enPwd1" type="password" value="" style="display: none">
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			
+			@}
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>用户名称：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="${manager.name}" placeholder="输入用户名称" id="name" name="name" datatype="*1-32" nullmsg="用户名称不能为空">
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			@if(flag!'0'!=1){
+			<div class="row cl">
+				<label class="form-label col-3">状态：</label>
+				<div class="formControls col-5"> <span class="select-box" style="width:150px;">
+					<select class="select" name="status" size="1">
+						<option value="1" 
+						@if(manager.status==1){
+							selected
+						@}
+						>正常</option>
+						<option value="3"
+						@if(manager.status==3){
+							selected
+						@}
+						>停用</option>
+					</select>
+					</span> 
+				</div>
+			</div>
+			@}
+			<div class="row cl">
+				<div class="col-9 col-offset-3">
+					<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+				</div>
+			</div>
+		</form>
+	</div>
+@};
+@var js = {
+	<script type="text/javascript" src="${request.contextPath}/lib/Validform/5.3.2/Validform.min.js"></script> 
+	<script type="text/javascript" src="${request.contextPath}/lib/jquery.form.js"></script>
+	<script type="text/javascript" src="${request.contextPath}/lib/jquery.md5.js"></script>
+	<script>
+		$(document).ready(function () {
+			validSubmitFormAndRefreshParent_page('updateForm');
+			$("#cancel").hide();
+			$("#changePwd").on('click',function(){
+				window.document.getElementById("newPwd").style.display="block";
+				window.document.getElementById("sureNewPwd").style.display="block";
+				$("#pwd").attr("datatype","*6-32");
+				$("#pwd2").attr("datatype","*6-32");	
+				$("#flag").val("1");
+				$("#changePwd").hide();	
+				$("#cancel").show();		
+			});
+			$("#cancel").on('click',function(){
+				window.document.getElementById("newPwd").style.display="none";
+				window.document.getElementById("sureNewPwd").style.display="none";	
+				$("#pwd").attr("datatype","*0-16");
+				$("#pwd2").attr("datatype","*0-16");	
+				$("#pwd").val("");
+				$("#pwd2").val("");	
+				$("#flag").val("0");
+				$("#changePwd").show();	
+				$("#cancel").hide();		
+			});
+		});
+		$("#pwd").on('change',function(){
+			$("#pwd").val($("#pwd").val().trim().replace(/\ +/g,""))
+		})
+		$("#pwd2").on('change',function(){
+			$("#pwd2").val($("#pwd2").val().trim().replace(/\ +/g,""))
+		})
+
+	</script>
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

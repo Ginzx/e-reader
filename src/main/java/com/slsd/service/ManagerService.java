@@ -20,4 +20,6 @@ public interface ManagerService {
 	public boolean editmanager(Manager manager) throws Exception;
 
 	public boolean delmanager(Manager manager) throws Exception;
+
+	public Manager SelectById(Integer mid) throws Exception;
 }

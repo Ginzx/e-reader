@@ -46,7 +46,7 @@ public class ManageLogDao {
 	}
 
 	public boolean AddManagelog(Managerlog managerlog) {
-		String sql = "insert into manager_log (m_id,account,content,Ip,remark,create_time) valus(?,?,?,?,?,?)";
+		String sql = "insert into manager_log (m_id,account,content,Ip,remark,create_time) values (?,?,?,?,?,?)";
 		try {
 			return this.jdbcTemplate.update(sql, managerlog.getmId(), managerlog.getAccount(), managerlog.getContent(),
 					managerlog.getIp(), managerlog.getRemark(), managerlog.getCreateTime()) > 0 ? true : false;

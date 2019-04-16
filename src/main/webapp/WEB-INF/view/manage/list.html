@@ -1,0 +1,53 @@
+@if(users.~size<1){
+<!-- 无数据提示 -->
+	<tr class="text-c">
+		<td valign="top" colspan="8">没有找到匹配的记录</td>
+	</tr>
+@}else{
+	@for(user in users){
+	<tr class="text-c">
+		<td>
+			<input type="checkbox" value="${user.userId}" name="chkId">
+		</td>
+		<td>
+			${user.account!}
+			@if(session.userInfo.siteId!0==0){
+			(${user.siteName!'无'})
+			@}
+		</td>
+		<td>${user.name!}</td>
+		<td>${user.phone!}</td>
+		<td>${user.email!}</td>
+		<td>${user.createTime!,dateFormat="yyyy-MM-dd HH:mm"}</td>
+		<td class="td-status">
+			@if(user.status == 1){
+			<span class="label label-success radius">正常</span>
+			@}else{
+			<span class="label radius">停用</span>
+			@}
+		</td>
+		<td class="td-manage">
+			@if(userUpdate!false&&session.userInfo.userId!''!=user.userId){
+			<a title="编辑" href="javascript:;" onclick="layer_show('修改用户','${request.contextPath}/user/update.html?uid=${user.userId}','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i>修改</a>
+			@}
+			@if(userDel!false&&session.userInfo.userId!''!=user.userId){
+			<a title="删除" href="javascript:;" onclick="del('${user.userId}', '${request.contextPath}/user/delete.html')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i>删除</a>
+			@}
+			@if(resetPwd!false&&session.userInfo.userId!''!=user.userId){
+			<a title="重置密码" href="javascript:;" onclick="resetPwd('${user.userId}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i>重置密码</a>
+			@}
+			@if(siteCount!'0'>=1){
+			@if(allotSite!false&&session.userInfo.userId!''!=user.userId){			
+				<a title="设置代管站点" href="javascript:;" onclick="layer_show('设置代管站点','${request.contextPath}/user/allot.html?userId=${user.userId}','280','520')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe61d;</i>设置代管站点</a>			
+			@}
+			@}
+		</td>
+	</tr>
+	@}
+	<script>
+		$(document).ready(function () {
+			//排序更新(防止出现上一页数据)
+			$(".tablesorter").trigger("update");
+		});
+	</script>
+@}

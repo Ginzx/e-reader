@@ -93,6 +93,16 @@ public class ManageDao {
 		}
 	}
 
+	public Manager SelectById(Integer mid){
+		String sql="select * from manager where M_id=?";
+		try {
+			RowMapper<Manager> rowMapper = BeanPropertyRowMapper.newInstance(Manager.class);
+			return this.jdbcTemplate.queryForObject(sql, rowMapper, mid);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 	public boolean addmanager(Manager manager) {
 		String sql = "insert INTO manager(account,name,pwd,Status,Create_Time)VALUES(?,?,?,1,?);";
 		try {

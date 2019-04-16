@@ -143,7 +143,7 @@ function validSubmitForm(formId,url){
 			var index = layer.load(0, {shade: false});
 			//如果有密码的表单，提交时进行加密
 			if($('#enPwd').length > 0){
-				$('#enPwd').val($.md5($('#pwd').val()));
+				$('#enPwd').val(($('#pwd').val()));
 				$('#pwd').val('');
 			}
 			var options = {
@@ -175,7 +175,7 @@ function validSubmitFormAndRefreshParent(formId){
 			var index = layer.load(0, {shade: false});
 			//如果有密码的表单，提交时进行加密
 			if($('#enPwd').length > 0){
-				$('#enPwd').val($.md5($('#pwd').val()));
+				$('#enPwd').val(($('#pwd').val()));
 				$('#pwd').val('');
 				//通常有确认密码
 				$('#pwd2').val('');
@@ -215,7 +215,7 @@ function validSubmitFormAndRefreshParent_page(formId){
 			var index = layer.load(0, {shade: false});
 			//如果有密码的表单，提交时进行加密
 			if($('#enPwd').length > 0){
-				$('#enPwd').val($.md5($('#pwd').val()));
+				$('#enPwd').val($('#pwd').val());
 				$('#pwd').val('');
 				//通常有确认密码
 				$('#pwd2').val('');

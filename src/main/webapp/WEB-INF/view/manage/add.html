@@ -1,0 +1,149 @@
+@var head = {
+	<title>用户管理-添加用户</title>
+	<link href="${request.contextPath}/lib/select/jquery.searchableSelect.css" rel="stylesheet" type="text/css">
+   <style type="text/css">
+   		body{background:#eff1f4;}
+   		.form .row{margin-top:0;padding-top:15px;}
+   	</style>
+@};
+@var content = {
+	<div class="pd-20" style="background:#eff1f4;" >
+		<form action="${request.contextPath}/user/add.html" method="post" class="form form-horizontal" id="createForm" style="width:70%;background:#fff;margin:0 auto;border-top:1px solid #cbced4;">
+			@if(session.userInfo.siteId!0==0){
+			<div class="row cl">
+				<label class="form-label col-3">
+				<span class="c-red">*</span>归属站点：</label>
+				<div class="formControls col-5" style="z-index:999;"> 
+					<select name="siteId" id="siteId" size="1" queryId="siteId" onchange="qryRole()">
+						@for(site in sites){
+							<option value="${site.siteId}">${site.name}</option>
+						@}
+					</select>
+					<span class="c-red">&nbsp分配后不可修改</span>
+				</div>
+				
+			</div>
+			@}else{
+			<input type="hidden" id="siteId" value="${siteId}" />
+			@}
+
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>帐号：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入帐号" id="account" name="account" datatype="/^[A-Za-z0-9]{2,32}$/" errormsg="请输入2-32位数字或字母" nullmsg="帐号不能为空">
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>密码：</label>
+				<div class="formControls col-5">
+					<input type="password" class="input-text" value="" placeholder="输入密码" id="pwd" name="pwd" datatype="/^[\S]{6,32}$/" nullmsg="密码不能为空且不含空格" errormsg="请填写6-32位不含空格的任意字符">
+					<input id="enPwd" name="enPwd" type="password" style="display: none">
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>确认密码：</label>
+				<div class="formControls col-5">
+					<input type="password" class="input-text" value="" placeholder="输入确认密码" id="pwd2" name="pwd2" recheck="pwd" datatype="/^[\S]{6,32}$/" nullmsg="确认密码不能为空且不含空格" errormsg="两次输入的密码不一致！">
+					<input id="enPwd1" name="enPwd1" type="password" style="display: none">
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>用户名称：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入用户名称" id="name" name="name" datatype="*1-128" nullmsg="用户名称不能为空">
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">手机号：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入手机号" id="phone" name="phone" datatype="m,n11-11" errormsg="手机号错误" ignore="ignore">
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">邮箱：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入邮箱" id="email" name="email" datatype="e" errormsg="邮箱错误" ignore="ignore">
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">状态：</label>
+				<div class="formControls col-5"> <span class="select-box" style="width:150px;">
+					<select class="select" name="status" size="1">
+						<option value="3">停用</option>
+						<option value="1" selected>正常</option>
+					</select>
+					</span> 
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">角色：</label>
+				<div class="formControls col-5" id="roleId" style="margin-top:3px;">
+				</div>
+			</div>
+			<div class="row cl">
+				<div class="col-9 col-offset-3" style="margin-bottom:50px;margin-left:55%;">
+					<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+				</div>
+			</div>
+		</form>
+	</div>
+@};
+@var js = { 
+	<script type="text/javascript" src="${request.contextPath}/lib/Validform/5.3.2/Validform.min.js"></script> 
+	<script type="text/javascript" src="${request.contextPath}/lib/jquery.form.js"></script>
+	<script type="text/javascript" src="${request.contextPath}/lib/jquery.md5.js"></script>
+    <script src="${request.contextPath}/lib/select/jquery.searchableSelect.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var siteId=${siteId};
+			if(siteId==''||siteId==0){
+				$("#siteId").searchableSelect();
+			}
+		});
+		$(document).ready(function () {
+			validSubmitFormAndRefreshParent('createForm');
+			qryRole();
+		});
+		$("#pwd").on('change',function(){
+			$("#pwd").val($("#pwd").val().trim().replace(/\ +/g,""))
+		})
+		$("#pwd2").on('change',function(){
+			$("#pwd2").val($("#pwd2").val().trim().replace(/\ +/g,""))
+		})
+		
+		function qryRole(){
+			var siteId=$("#siteId").val();
+			$.ajax({
+            		url:"${request.contextPath}/role/qryRoleList.html",
+					dataType:'json',
+					type:'POST',
+			    	data:{siteId:siteId,curr:0,size:0},
+				    success : function(result){
+				    	var items=result.data;
+				    	var html='';
+				    	$.each(items,function(i){
+/* 				    		html+='<input type="checkbox" name="channelId" value="'+items[i].id+'" style="margin-right:10px;">'+items[i].roleName
+ */				    		if(items[i].status==3){
+ 								html+='<div style="width:88px;float:left;text-align:left;line-height:25px;color:red"><input type="checkbox" name="roleIds" value="'+items[i].id+'" style="margin-right:5px;">'+items[i].roleName+'</div>'
+				    		}else{
+				    		 	html+='<div style="width:88px;float:left;text-align:left;line-height:25px;"><input type="checkbox" name="roleIds" value="'+items[i].id+'" style="margin-right:5px;">'+items[i].roleName+'</div>'
+				    		}
+				    	})
+				    	if(items.length==0){
+				    		html+='<div style="width:120px;float:left;text-align:left;line-height:25px;">无(请先创建角色)</div>'
+				    	}
+				    	$("#roleId").html(html);
+				    },
+				    error : function(e){alert(e)}  
+            });
+		}
+	</script>
+	
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

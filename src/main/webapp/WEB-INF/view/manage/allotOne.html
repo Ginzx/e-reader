@@ -1,0 +1,61 @@
+@var head = {
+	<title>分配站点</title>
+@};
+@var content = {
+	
+	<div class="pd-5" style="height:100%">
+		<div class="pd-20">
+		<input type="hidden" class="input-text chk_1" value="${userId!''}" placeholder="" id="userId" name="userId">	
+			
+		</div>
+		<div class="cl pd-5 mt-20 col-10 col-offset-1"> 
+			<span class="l">
+				@if(allotSite!false){
+					@if(managerUserSites.~size==0){
+						<a href="javascript:;" onclick="allotOne(2)" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加到本站点</a>
+					@}else{
+						@if(inThisSite!''==1){
+						<a href="javascript:;" onclick="allotOne(1)" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe6a1;</i> 从本站点移除</a>
+						@}else{
+						<a href="javascript:;" onclick="allotOne(3)" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加到本站点</a>
+						@}
+					@}
+				
+				@}
+			</span> 
+		</div>
+		<input type="hidden" id="ids" name="ids">
+	</div>
+@};
+@var js = {
+	<script>
+		$(document).ready(function () {
+			
+		});
+		function allotOne(flag){
+			layer.confirm('确认设置？', {btn: ['确定','取消']},function(){	
+			var userId=$("#userId").val();
+			$.ajax({
+	    		type : 'POST',
+	    		dataType : 'json',
+	    		url : "${request.contextPath}/user/allot.html",
+	    		data : {flag:flag,userId:userId},
+		        error : function(e){
+		        	layer.msg('请求错误');
+		        },
+		        success : function(e){
+		        	if(e.code == 200){
+		        		layer.msg('设置成功！');
+		        		window.parent.$(".layui-layer-setwin .layui-layer-close1").click();
+		        	}
+		        	else{
+		        		layer.msg('操作失败：'+e.msg);
+		        	}
+		        }
+    		});
+    		});
+		};
+	</script>	
+		
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

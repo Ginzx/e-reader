@@ -1,0 +1,132 @@
+@var head = {
+	<title>用户管理</title>
+	<link href="${request.contextPath}/lib/select/jquery.searchableSelect.css" rel="stylesheet" type="text/css">
+	<style type="text/css">
+   		.liform li b{min-width:70px;}
+   	</style>
+@};
+@var content = {
+	<nav class="breadcrumb">
+		<i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 用户管理
+		<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+	</nav>
+	<div class="pd-20">
+		<div class="text-c">
+			<form action="${request.contextPath}/user/search.html" method="post" id="searchForm" class="liform">
+				<li>@if(session.userInfo.siteId!0==0){				
+					<b>归属站点：</b>
+					<select name="siteId" id="siteId" size="1" style="z-index:999;width:160px" >
+							<option value="">全部</option>
+							@for(site in sites){
+								<option value="${site.siteId}"
+								@if(siteId!'0'==site.siteId){
+									selected
+								@}
+								>${site.name}</option>
+							@}
+					</select>
+					@}
+				</li>
+				<li>
+					<b>帐号：</b>
+					<input type="text" class="input-text" style="width:150px" placeholder="输入帐号" id="" name="account" value="${account!''}">
+				</li>
+				<li>
+					<b>用户名称：</b>
+					<input type="text" class="input-text" style="width:150px" placeholder="输入用户名" id="" name="name" value="${name!''}">
+				</li>
+				<li>
+					<b>手机号：</b>
+					<input type="text" class="input-text" style="width:150px" placeholder="输入手机号" id="" name="phone" value="${phone!''}">
+				</li>
+				<li>
+					<b>状态：</b>
+					<span class="select-box" style="width:150px">
+						<select name="status" class="select">
+							<option value="">全部</option>
+							<option value="1"
+							@if(status!'0' == 1){
+							 selected
+							@} 
+							>正常</option>
+						    <option value="3"
+						    @if(status!'0' == 3){
+							 selected
+							@}
+						    >停用</option>
+						 </select>
+					 </span>
+					 <button type="submit" class="btn btn-success" style="margin-left:30px;"><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+				</li>
+				
+			</form>
+		</div>
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+			<span class="l">
+				@if(userBatchDel!false){
+				<a href="javascript:;" onclick="dels('${request.contextPath}/user/batchdelete.html')" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+				@}
+				@if(userAdd!false){
+				<a href="javascript:;" onclick="layer_full_show('添加用户','${request.contextPath}/user/add.html?siteId=${siteId!''}','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加用户</a>
+				@}
+			</span> 
+			<span class="r">
+				每页显示：
+				<select id="set_pagesize" onchange="setPageSize(this.options[this.options.selectedIndex].value,'${request.contextPath}/','searchForm')">
+					<option value="10">10条</option>
+					<option value="25">25条</option>
+					<option value="50">50条</option>
+					<option value="100">100条</option>
+				</select>
+				&nbsp;&nbsp;总数：<strong>${total}</strong> 条
+			</span>  
+		</div>
+		<table id="myTable" class="table table-border table-bordered table-bg table-hover tablesorter">
+			<thead>
+				<tr class="text-c">
+					<th width="5%"><input type="checkbox" name="" value=""></th>
+					<th width="14%">帐号
+					@if(session.userInfo.siteId!0==0){
+					(归属站点)
+					@}
+					</th>
+					<th width="12%">名称</th>
+					<th width="10%">手机号</th>
+					<th width="15%">邮箱</th>
+					<th width="13%">创建时间</th>
+					<th width="7%">状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody id="dataContent">
+				
+			</tbody>
+		</table>
+		<div id="pager" style="padding-top:5px;float:right"></div>
+	</div>
+	<!-- <footer class="footer"></footer> -->
+@};
+@var js = {
+	<script src="${request.contextPath}/lib/select/jquery.searchableSelect.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$("#siteId").searchableSelect();
+		});
+	</script>
+	<script>
+		$(document).ready(function () {
+			pager('${request.contextPath}/user/list.html', {account:"${account!''}",name:"${name!''}",phone:"${phone!''}",status:"${status!''}",siteId:"${siteId!''}"}, ${total}, page_size,1);
+			//排序初始化，第一列不进行排序(索引从0开始) 
+			$.tablesorter.defaults.headers = {0: {sorter: false},1: {sorter: false},2: {sorter: false},3: {sorter: false},4: {sorter: false},5: {sorter: false},6: {sorter: false},7: {sorter: false}};
+			$(".tablesorter").tablesorter();
+		});
+		function localAjaxReload(){
+				pager('${request.contextPath}/user/list.html', {account:"${account!''}",name:"${name!''}",phone:"${phone!''}",status:"${status!''}",siteId:"${siteId!''}"}, ${total}, page_size,$(".laypage_curr").text());
+		}
+		//刷新list页面
+		function freshPage(){
+			pager('${request.contextPath}/user/list.html', {account:"${account!''}",name:"${name!''}",phone:"${phone!''}",status:"${status!''}",siteId:"${siteId!''}"}, ${total}, page_size,$(".laypage_curr").text());
+		}
+	</script>
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

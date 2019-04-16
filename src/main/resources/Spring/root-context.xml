@@ -7,16 +7,18 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
     <!-- 自动扫描该包 -->
-    <context:component-scan base-package="com.slsd" />
+    <context:component-scan base-package="com.slsd"/>
     <!-- 加载 jdbc.properties 数据连接配置信息 -->
-    <context:property-placeholder location="classpath:mysql.properties" />
+    <context:property-placeholder location="classpath:mysql.properties"/>
     <!-- 数据库连接池 -->
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
-        <!-- 基本属性 url、user、password -->
-        <property name="driverClassName" value="${jdbc.driver}" />
-        <property name="url" value="${jdbc.url}" />
-        <property name="username" value="${jdbc.username}" />
-        <property name="password" value="${jdbc.password}" />
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="maxActive" value="10"/>
+        <property name="maxIdle" value="5"/>
     </bean>
 
     <!-- 配置 Spirng 的 JdbcTemplate -->
