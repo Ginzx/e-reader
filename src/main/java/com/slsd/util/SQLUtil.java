@@ -42,7 +42,7 @@ public class SQLUtil {
 		} else if (db_type.equals(DBMS_MYSQL_TYPE)) {
 			sql = sql.trim();
 			StringBuffer pagingSelect = new StringBuffer(sql.length() + 100);
-			pagingSelect.append(" limit "+pageSize+" "+pageStart+" ");
+			pagingSelect.append(" limit "+pageStart+" "+pageSize+" ");
 			return pagingSelect.toString();
 		}
 

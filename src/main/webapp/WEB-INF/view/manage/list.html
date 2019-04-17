@@ -1,23 +1,18 @@
-@if(users.~size<1){
+@if(managers.~size<1){
 <!-- 无数据提示 -->
 	<tr class="text-c">
 		<td valign="top" colspan="8">没有找到匹配的记录</td>
 	</tr>
 @}else{
-	@for(user in users){
+	@for(user in managers){
 	<tr class="text-c">
 		<td>
-			<input type="checkbox" value="${user.userId}" name="chkId">
+			<input type="checkbox" value="${user.mId}" name="chkId">
 		</td>
 		<td>
 			${user.account!}
-			@if(session.userInfo.siteId!0==0){
-			(${user.siteName!'无'})
-			@}
 		</td>
 		<td>${user.name!}</td>
-		<td>${user.phone!}</td>
-		<td>${user.email!}</td>
 		<td>${user.createTime!,dateFormat="yyyy-MM-dd HH:mm"}</td>
 		<td class="td-status">
 			@if(user.status == 1){
@@ -27,19 +22,14 @@
 			@}
 		</td>
 		<td class="td-manage">
-			@if(userUpdate!false&&session.userInfo.userId!''!=user.userId){
-			<a title="编辑" href="javascript:;" onclick="layer_show('修改用户','${request.contextPath}/user/update.html?uid=${user.userId}','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i>修改</a>
+			@if(session.ManagerInfo.mId!''!=user.mId){
+			<a title="编辑" href="javascript:;" onclick="layer_show('修改用户','${request.contextPath}/manage/update.html?mid=${user.mId}','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i>修改</a>
 			@}
-			@if(userDel!false&&session.userInfo.userId!''!=user.userId){
-			<a title="删除" href="javascript:;" onclick="del('${user.userId}', '${request.contextPath}/user/delete.html')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i>删除</a>
+			@if(session.ManagerInfo.mId!''!=user.mId){
+			<a title="删除" href="javascript:;" onclick="del('删除', '${request.contextPath}/manage/delete.html?mid=${user.mId}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i>删除</a>
 			@}
-			@if(resetPwd!false&&session.userInfo.userId!''!=user.userId){
-			<a title="重置密码" href="javascript:;" onclick="resetPwd('${user.userId}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i>重置密码</a>
-			@}
-			@if(siteCount!'0'>=1){
-			@if(allotSite!false&&session.userInfo.userId!''!=user.userId){			
-				<a title="设置代管站点" href="javascript:;" onclick="layer_show('设置代管站点','${request.contextPath}/user/allot.html?userId=${user.userId}','280','520')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe61d;</i>设置代管站点</a>			
-			@}
+			@if(session.ManagerInfo.mId!''!=user.mId){
+				<a title="设置功能列表" href="javascript:;" onclick="layer_show('设置菜单','${request.contextPath}/manage/menusearch.html?mid=${user.mId}','280','520')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe61d;</i>设置功能列表</a>
 			@}
 		</td>
 	</tr>

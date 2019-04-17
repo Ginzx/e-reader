@@ -39,12 +39,17 @@ public class ManagerServiceImpl implements ManagerService {
 		return manageDao.editmanager(manager);
 	}
 
-	public boolean delmanager(Manager manager) throws Exception {
-		return manageDao.delmanager(manager);
+	public boolean delmanager(Integer mid) throws Exception {
+		return manageDao.delmanager(mid);
 	}
 
 	@Override
 	public Manager SelectById(Integer mid) {
 		return manageDao.SelectById(mid);
+	}
+
+	@Override
+	public Integer CountManager(Manager manager) throws Exception {
+		return manageDao.CountManager(manager);
 	}
 }

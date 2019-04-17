@@ -24,18 +24,18 @@ public class ManageLogDao {
 	private JdbcTemplate jdbcTemplate;
 
 	public List<Managerlog> Select(Managerlog managerlog) {
-		String sql = "select * from manager_log where 1=1";
+		String sql = "select * from manager_log where 1=1 ";
 		List<Object> sqlParams = new ArrayList<Object>();
 		if (managerlog != null) {
 			if (!StringUtil.isEmpty(managerlog.getAccount())) {
-				sql += "and account like ?";
+				sql += "and account like ? ";
 				sqlParams.add("%" + managerlog.getAccount() + "%");
 			}
 			if (!StringUtil.isEmpty(managerlog.getRemark())) {
-				sql += "and remark like ?";
+				sql += "and remark like ? ";
 				sqlParams.add("%" + managerlog.getRemark() + "%");
 			}
-			sql += "ORDER BY Create_time DESC";
+			sql += "ORDER BY Create_time DESC ";
 		}
 		try {
 			RowMapper<Managerlog> rowMapper = BeanPropertyRowMapper.newInstance(Managerlog.class);

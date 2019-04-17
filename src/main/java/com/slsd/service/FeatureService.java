@@ -1,6 +1,7 @@
 package com.slsd.service;
 
 import com.slsd.entiy.Feature;
+import com.slsd.entiy.TreeNode;
 
 import java.util.List;
 
@@ -23,4 +24,10 @@ public interface FeatureService {
 	public boolean addManagerFeature(Integer mid, Integer fid);
 
 	public boolean delManagerFeature(Integer mid);
+
+	public List<Feature> SelectManagerFeature(Integer mid);
+
+	List<TreeNode> getMenuTreeNodes(int mid) throws Exception;
+
+	public void setMenus(int mid, String menuIds) throws Exception ;
 }

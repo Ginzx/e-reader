@@ -21,6 +21,16 @@ public class FeatureDao {
 	@Resource
 	private JdbcTemplate jdbcTemplate;
 
+	public List<Feature> Selectall() {
+		String sql = "select * from feature order by f_id ";
+		try {
+			RowMapper<Feature> rowMapper = BeanPropertyRowMapper.newInstance(Feature.class);
+			return jdbcTemplate.query(sql, rowMapper);
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
+	}
+
 	/**
 	 * 查找父类菜单
 	 *
@@ -82,6 +92,16 @@ public class FeatureDao {
 		}
 	}
 
+	public List<Feature> SelectManagerFeature(Integer mid) {
+		String sql = "select f_id from manager_feature where m_id=?";
+		try {
+			RowMapper<Feature> rowMapper = BeanPropertyRowMapper.newInstance(Feature.class);
+			return jdbcTemplate.query(sql, rowMapper, mid);
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
+	}
+
 	public boolean AddFeature(Feature feature) {
 		String sql = "insert into feature(f_id,f_name,parent_id,parent_adress) Values(?,?,?,?)";
 		try {
@@ -111,7 +131,7 @@ public class FeatureDao {
 
 
 	public boolean addManagerFeature(Integer mid, Integer fid) {
-		String sql = "insert into managerfeature (m_id,f_id) Values(?,?)";
+		String sql = "insert into manager_feature (m_id,f_id) Values(?,?)";
 		try {
 			return jdbcTemplate.update(sql, mid, fid) > 0 ? true : false;
 		} catch (Exception e) {
@@ -120,7 +140,7 @@ public class FeatureDao {
 	}
 
 	public boolean delManagerFeature(Integer mid) {
-		String sql = "del from managerfeature where mid=?";
+		String sql = "delete from manager_feature where m_id=?";
 		try {
 			return jdbcTemplate.update(sql, mid) > 0 ? true : false;
 		} catch (Exception e) {

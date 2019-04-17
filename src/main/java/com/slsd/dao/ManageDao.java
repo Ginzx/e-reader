@@ -55,15 +55,15 @@ public class ManageDao {
 		}
 	}
 
-	public List<Manager> selectmanager(Integer offset, Integer length,Manager manager) {
-		String sql = "select * from manager where 1=1";
+	public Integer CountManager(Manager manager) {
+		String sql = "select count(*) from manager where 1=1 ";
 		List<Object> sqlParams = new ArrayList<Object>();
 		if (manager != null) {
-			if (StringUtil.isEmpty(manager.getAccount())) {
+			if (manager.getAccount()!="") {
 				sql += "and account like ?";
 				sqlParams.add("%" + manager.getAccount() + "%");
 			}
-			if (StringUtil.isEmpty(manager.getName())) {
+			if (manager.getName()!="") {
 				sql += "and name like ?";
 				sqlParams.add("%" + manager.getAccount() + "%");
 			}
@@ -71,10 +71,37 @@ public class ManageDao {
 				sql += "and status=?";
 				sqlParams.add(manager.getStatus());
 			}
-			sql += "order by m_id desc";
 		}
 		try {
-			sql = SQLUtil.getPageSQL(sql, offset, length, SQLUtil.DBMS_MYSQL_TYPE);
+			return this.jdbcTemplate.queryForObject(sql,
+					sqlParams.toArray(new Object[sqlParams.size()]), Integer.class);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+
+	public List<Manager> selectmanager(Integer offset, Integer length, Manager manager) {
+		String sql = "select * from manager where 1=1 ";
+		List<Object> sqlParams = new ArrayList<Object>();
+		if (manager != null) {
+			if (manager.getAccount()!="") {
+				sql += "and account like ? ";
+				sqlParams.add("%" + manager.getAccount() + "%");
+			}
+			if (manager.getName()!="") {
+				sql += "and manager.name like ? ";
+				sqlParams.add("%" + manager.getName() + "%");
+			}
+			if (manager.getStatus() != null && manager.getStatus() > 0) {
+				sql += "and status=? ";
+				sqlParams.add(manager.getStatus());
+			}
+			sql += "order by m_id desc limit ?,?";
+			sqlParams.add(offset);
+			sqlParams.add(length);
+		}
+		try {
 			RowMapper<Manager> rowMapper = BeanPropertyRowMapper.newInstance(Manager.class);
 			return jdbcTemplate.query(sql, sqlParams.toArray(new Object[sqlParams.size()]), rowMapper);
 		} catch (Exception e) {
@@ -93,8 +120,8 @@ public class ManageDao {
 		}
 	}
 
-	public Manager SelectById(Integer mid){
-		String sql="select * from manager where M_id=?";
+	public Manager SelectById(Integer mid) {
+		String sql = "select * from manager where M_id=?";
 		try {
 			RowMapper<Manager> rowMapper = BeanPropertyRowMapper.newInstance(Manager.class);
 			return this.jdbcTemplate.queryForObject(sql, rowMapper, mid);
@@ -124,10 +151,10 @@ public class ManageDao {
 		}
 	}
 
-	public boolean delmanager(Manager manager) {
+	public boolean delmanager(Integer mid) {
 		String sql = "delete from manager where M_id=?";
 		try {
-			return this.jdbcTemplate.update(sql, manager.getmId()) > 0 ? true : false;
+			return this.jdbcTemplate.update(sql, mid) > 0 ? true : false;
 		} catch (Exception e) {
 			return false;
 		}

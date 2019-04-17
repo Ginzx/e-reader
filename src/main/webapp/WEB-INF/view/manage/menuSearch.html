@@ -1,0 +1,110 @@
+@var head = {
+<link href="${request.contextPath}/lib/ztree/zTreeStyle.css" rel="stylesheet" type="text/css" />
+<title>设置菜单</title>
+@};
+@var content = {
+<div class="pd-5" style="height:100%">
+	<ul id="menuTree" class="ztree">
+
+	</ul>
+	<div class="cl pd-5 mt-20">
+			<span class="l">
+				<a href="javascript:;" onclick="setMenus();" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 设置菜单</a>
+			</span>
+	</div>
+	<input type="hidden" id="ids" name="ids">
+</div>
+@};
+@var js = {
+<script type="text/javascript" src="${request.contextPath}/lib/ztree/jquery.ztree.all-3.5.min.js"></script>
+<script>
+    var treeSetting = {
+        check: {
+            chkboxType : {"Y" : "ps", "N" : "ps"},
+            enable: true
+        },
+        view : {
+            dblClickExpand : false
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback : {
+            onCheck : onMenuTreeCheck,
+        }
+    };
+    $(document).ready(function () {
+        //获取角色菜单
+        getTreeData();
+    });
+
+    function onMenuTreeCheck(e, treeId, treeNode) {
+        var menuTree = $.fn.zTree.getZTreeObj(treeId);
+        var nodes = menuTree.getCheckedNodes(true);
+        var ids = "";
+        var names = "";
+        for (var i = 0, l = nodes.length; i < l; i++) {
+            ids += nodes[i].id + ",";
+            names += nodes[i].name + ",";
+        }
+        if (ids.length > 0)
+            ids = ids.substring(0, ids.length - 1);
+        if (names.length > 0)
+            names = names.substring(0, names.length - 1);
+        $("#ids").val(ids);
+        //alert($("#ids").val());
+    }
+    function ajaxDataFilter(treeId, parentNode, responseData) {
+        return responseData.data;
+    }
+
+    function getTreeData(){
+        var options = {
+            url : "${request.contextPath}/manage/menuchilds.html?mid=${mid}",
+            error : function(e){
+                layer.msg('请求错误');
+            },
+            success : function(e){
+                if(e.code == 200){
+                    var zNodes=e.data;
+                    var menuTree = $.fn.zTree.init($("#menuTree"), treeSetting, zNodes);
+                    expandFirstNode(menuTree);
+                }
+                else{
+                    layer.msg('失败:'+e.msg);
+                }
+            }
+        };
+        commmonAjax(options);
+        return false;
+    }
+
+    function expandFirstNode(menuTree){
+        var nodes = menuTree.getNodes();
+        menuTree.expandNode(nodes[0], true);
+    }
+
+    function setMenus(){
+        var options = {
+            url : "${request.contextPath}/manage/setmenus.html?mid=${mid}",
+            data : {ids : $("#ids").val()},
+            error : function(e){
+                layer.msg('请求错误');
+            },
+            success : function(e){
+                if(e.code == 200){
+                    layer.msg(e.msg);
+                }
+                else{
+                    layer.msg('失败:'+e.msg);
+                }
+            }
+        };
+        commmonAjax(options);
+        return false;
+    }
+</script>
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

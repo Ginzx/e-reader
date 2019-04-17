@@ -13,13 +13,15 @@ public interface ManagerService {
 
 	public Manager selectbyaccount(String account) throws Exception;
 
-	public List<Manager> selectmanager(Integer offset, Integer length,Manager manager) throws Exception;
+	public List<Manager> selectmanager(Integer offset, Integer length, Manager manager) throws Exception;
 
 	public boolean addmanager(Manager manager) throws Exception;
 
 	public boolean editmanager(Manager manager) throws Exception;
 
-	public boolean delmanager(Manager manager) throws Exception;
+	public boolean delmanager(Integer mid) throws Exception;
 
 	public Manager SelectById(Integer mid) throws Exception;
+
+	public Integer CountManager(Manager manager) throws Exception;
 }
