@@ -1,0 +1,1254 @@
+@var head = {
+<title>资源分类管理-添加分类</title>
+<style>
+	.cl{margin-bottom: 10px;}
+	.col-4{text-align:left;margin-left:5px;width:31%;margin-top:5px;}
+	label{line-height:31px;}
+	.form-label{padding-left:20px;}
+</style>
+@}; 
+@var content = {
+
+<div class="pd-20" style="background:#eff1f4;">
+<div style="width:70%;background:#fff;margin:0 auto;border-top:1px solid #cbced4">
+<div style="width:85%;background:#fff;margin:0 auto;padding-top:20px;padding-bottom:20px;">
+	<span style="font-family:微软雅黑;font-size:16px;padding-left:10px;">资源类型</span>
+	<div class="text-c" style=" height: 31px;padding: 10px;">
+		<div class="row cl">
+				<label class="form-label col-3" style="line-height:31px;">资源类型：</label>
+				<div class="formControls col-5">
+					<input type="hidden" value="${choiceType}" id="choiceType">
+					<input type="text" class="input-text" disabled="disabled" 
+						@if(choiceType==1||choiceType==2||choiceType==7){
+							value="图书"
+						@}else if(choiceType==5){
+							value="电子文稿 "
+						@}else if(choiceType==6){
+							value="图集 "
+						@}else if(choiceType==3){
+							value="音频 "
+						@}else if(choiceType==4){
+							value="视频 "
+						@}
+					>
+					<!-- <span class="select-box" > 
+						<select class="select" name="choiceType" id="choiceType" size="1" onchange="showHidden()" disabled="disabled">
+							<option value="1" 
+							@if(choiceType==1||choiceType==2){
+							selected
+							@}
+							>图书</option>
+							<option value="2"
+							@if(choiceType==5){
+							selected
+							@}
+							>电子文稿 </option>
+							<option value="3"
+							@if(choiceType==6){
+							selected
+							@}
+							>图集</option>
+							<option value="4"
+							@if(choiceType==3){
+							selected
+							@}
+							>音频</option>
+							<option value="5"
+							@if(choiceType==4){
+							selected
+							@}
+							>视频</option>
+						</select>
+					</span> -->
+				</div>
+			</div>
+	</div>
+	
+	<!-- form1 -->
+	<form action="${request.contextPath}/book/addBook.html?taskId=${taskId}&siteId=${siteId}" method="post" id="bookfrom" 
+	@if(choiceType!=1&&choiceType!=2&&choiceType!=7){
+		hidden="hidden"
+	@}
+	 >
+		<div class="text-c" style=" height: 500px;padding: 10px;margin-bottom:20px;"">
+			<span style="font-family:微软雅黑;font-size:16px;float: left;display:inline-block;width:100%;text-align:left;margin-bottom:10px;">基本信息</span>
+			<!-- <hr style="clear: left;"> -->
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3"><span class="c-red">*</span>BOOK_id：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value=""
+						placeholder="输入bookId" id="nlcBookId" name="nlcBookId"
+						 datatype="/^\w{1,32}$/" errormsg="请输入1-32位数字或字母" nullmsg="BOOK_Id不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl" >
+				<label class="form-label col-3"><span class="c-red">*</span>标题：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入标题"
+						id="name" name="name" datatype="*1-128" nullmsg="标题不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>作者：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入作者"
+						id="author" name="author" datatype="*1-32" nullmsg="作者不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<!-- <div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>图书来源：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="fromSource" size="1">
+								<option value="1" selected>自建资源</option>
+								<option value="2">移动阅读</option>		
+						</select>
+					</span>
+				</div>
+			</div> -->
+			<input type="hidden" name="fromSource" id="fromSource" value="1">
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>是否登录阅读：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name=mustLogin size="1">
+								<option value="1" selected>是</option>
+								<option value="2">否</option>		
+						</select>
+					</span>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>分类：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="categoryId" id="categoryId" size="1">
+							@for(category in categoryList){
+									<option value="${category.categoryId}" >${category.name}</option>
+							@}	
+						</select>
+					</span>
+				</div>
+			</div>
+			<div class="row cl" id="detailedType" hidden="hidden">
+				<label class="form-label col-3"><span class="c-red">*</span>分类：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="categoryId" id="categoryId" size="1">
+							@for(category in categoryList){
+								@if(category.parentId==1){
+									<option value="${category.categoryId}" >${category.name}</option>
+								@}
+							@}	
+						</select>
+					</span>
+				</div>
+			</div>
+			<input type="hidden" value="" name="categoryName" id="categoryName">
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>版权开始时间：</label>
+				<div class="formControls col-5">
+					<input type="text" 
+					 name="copyrightBeginDate" id="copyrightBeginDate" class="Wdate input-text input-medium" 
+					 onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'copyrightEndDate\')}' })"   
+					 value="" placeholder="输入版权开始时间" datatype="*1-30" nullmsg="版权开始时间不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>版权结束时间：</label>
+				<div class="formControls col-5">
+					<input type="text" 
+					 name="copyrightEndDate" id="copyrightEndDate" class="Wdate input-text input-medium" 
+					 onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'copyrightBeginDate\')}' })" 
+					 value="" placeholder="输入版权结束时间" datatype="*1-30" nullmsg=版权结束时间不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			
+			<div class="row cl">
+				<label class="form-label col-3">首次发行时间：</label>
+				<div class="formControls col-5">
+					<input type="text" 
+						id="firstPublisherTime" name="firstPublisherTime" class="Wdate input-text input-medium" 
+						onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'copyrightBeginDate\')}' })" 
+					 value=""placeholder="输入首次发行时间"  datatype="*0-30">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">关键词：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder='输入关键词,可添加多个用","分隔'
+						id="keywords" name="keywords" datatype="*0-128" >
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3" style="line-height:22px;">行业：</label>
+				<div class="formControls col-5" >
+				@for(channel in channelList){
+					<div style="width:88px;float:left;text-align:left;line-height:25px;"><input type="checkbox" name="channelId" value="${channel.channelId}" style="margin-right:5px;">${channel.channelName}</div>
+				@}
+				</div>
+			</div>
+		</div>
+		<div class="text-c" style="height: 700px;padding: 10px;margin-bottom:20px;"">
+			<span style="font-family:微软雅黑;font-size:16px;float: left;display:inline-block;width:100%;text-align:left;margin-bottom:10px;">扩展信息</span>
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3">出版社：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value=""placeholder="输入出版社名称" id="publisher" name="publisher"datatype="*0-128" >
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3">内容提供商：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="sourceCP" id="sourceCP" size="1">
+							<option value="">请选择</option>
+							@for(fromSource in fromSourceList){
+								<option value="${fromSource.sourceCp}" >${fromSource.sourceCp}</option>
+							@}	
+						</select>
+					</span>
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">ISBN：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入ISBN编号"
+						id="isbn" name="isbn" datatype="*0-64" nullmsg="标题不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">图书短简介：</label>
+				<div class="formControls col-5">
+					<textarea name="shortIntro" wrap="hard"  id="shortIntro" cols="" rows="" class="textarea" placeholder="请在这里输入内容(0/250字)" datatype="*0-250" dragonfly="true"  onkeyup="textarealength(this,999)"></textarea>
+					<p class="textarea-numberbar"><em class="textarea-length">0</em>/250</p> 
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">图书长简介：</label>
+				<div class="formControls col-5">
+					<textarea name="longIntro" wrap="hard" id="longIntro" cols="" rows="" class="textarea" placeholder="请在这里输入内容(0/2048字)" datatype="*0-2000" dragonfly="true"  onkeyup="textarealength(this,3000)"></textarea>
+					<p class="textarea-numberbar"><em class="textarea-length">0</em>/2048</p> 
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">字数：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入字数"	id="wordCount" name="wordCount" datatype="n0-11" nullmsg="标题不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">章节数：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入章节数"id="tocalChapters" name="tocalChapters" datatype="n0-11" nullmsg="作者不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			
+			<div class="row cl">
+				<label class="form-label col-3">封面图片：</label>
+					<p style="text-align:left;color:#f44336;line-height:35px;">建议上传600*800像素的图片,图片支持后缀为jpg/png格式</p>
+					<!-- <p>图片支持后缀为jpg/png格式</p> -->
+				<div class="formControls col-5">
+					<img id="img"  width="100px" height="133px" src="${request.contextPath}/images/srcimg1.png" style="margin-left:60%;margin-bottom:10px;">
+					<div id="filePicker" class="webuploader-container" style="float: left;margin-left:60%;width:100%;">
+					<div style="clear: left;margin-left: 10px;">
+					</div>
+					<div class="uploader-thum-container">
+						<div id="filePicker" class="webuploader-container" style="text-align:left;">
+							<input class="webuploader-pick" type="button" value="添加" style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:3px 9px;cursor: pointer;float:left;">
+							<input class="clear_url" type="button" value="删除" style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:3px 9px;margin-left:16px;cursor: pointer;">
+							<!-- <div class="webuploader-pick">选择图片</div> -->
+								<div id="rt_rt_1agrit9p86a6102613rm2vu1gkr1" style="width:45px; height: 30px; overflow: hidden; bottom: auto; right: auto;position:absolute;left:0;top:0;">
+									<input type="file" name="myfiles" id="file" onchange="getpath()" class="" style="cursor:pointer;position:relative;left: 0;top: 0;width:200px;height:130%;opacity:0;font-size:100px;" multiple="multiple" accept="image/*">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" value="" name="coverUrl" id="coverUrl">
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">是否连载：</label>
+				<div class="formControls col-5" style="text-align:left;margin-top:7px;">
+					<input type="radio" name="isSerial" value="1" checked="checked">是
+					<input type="radio" name="isSerial" value="2" style="margin-left:10px;">否
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">是否完本：</label>
+				<div class="formControls col-5" style="text-align:left;margin-top:7px;">
+					<input type="radio" name="isFinish" value="1" checked="checked">是
+					<input type="radio" name="isFinish" value="2" style="margin-left:10px;">否
+				</div>
+			</div>
+		</div>
+	</form>	
+	
+	<!-- form2 -->
+	<form action="${request.contextPath}/document/addDocument.html?taskId=${taskId}&siteId=${siteId}" method="post" id="documentfrom"
+	@if(choiceType!=5){
+		hidden="hidden"
+	@}
+	>
+		<div class="text-c" style=" height: 400px;padding: 10px;margin-bottom:20px;"">
+			<span style="font-family:微软雅黑;font-size:16px;float: left;display:inline-block;width:100%;text-align:left;margin-bottom:10px;">基本信息</span>
+			<!-- <hr style="clear: left;"> -->
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3"><span class="c-red">*</span>BOOK_id：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value=""
+						placeholder="输入bookId" id="nlcBookId" name="nlcBookId"
+						datatype="/^\w{1,32}$/" errormsg="请输入1-32位数字或字母"  nullmsg="BOOK_Id不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>标题：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入标题"
+						id="name" name="name" datatype="*1-128" nullmsg="标题不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>作者：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入作者"
+						id="author" name="author" datatype="*1-32" nullmsg="作者不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<!-- <div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>图书来源：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="fromSource" size="1">
+								<option value="1" selected>自建资源</option>
+								<option value="2">移动阅读</option>		
+						</select>
+					</span>
+				</div>
+			</div> -->
+			<input type="hidden" name="fromSource" value="1">
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>版权开始时间：</label>
+				<div class="formControls col-5">
+					<input type="text" 
+					 name="copyrightBeginDate" id="copyrightBeginDate2" class="Wdate input-text input-medium" 
+					 onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'copyrightEndDate2\')}' })"   
+					 value="" placeholder="输入版权开始时间" datatype="*1-30" nullmsg="版权开始时间不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>版权结束时间：</label>
+				<div class="formControls col-5">
+					<input type="text" 
+					 name="copyrightEndDate" id="copyrightEndDate2" class="Wdate input-text input-medium" 
+					 onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'copyrightBeginDate2\')}' })" 
+					 value="" placeholder="输入版权结束时间" datatype="*1-30" nullmsg=版权结束时间不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			
+			
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>分类：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="categoryId" size="1">
+							@for(category in categoryList){
+									<option value="${category.categoryId}" nameVal="${category.name}">${category.name}</option>
+							@}	
+						</select>
+					</span>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">关键词：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder='输入关键词,可添加多个用","隔开'
+						id="keywords" name="keywords" datatype="*0-128" >
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3" style="line-height:22px;">行业：</label>
+				<div class="formControls col-5">
+					@for(channel in channelList){
+						<div style="width:88px;float:left;text-align:left;line-height:25px;"><input type="checkbox" name="channelId" value="${channel.channelId}" style="margin-right:5px;">${channel.channelName}</div>
+					@}
+				</div>
+			</div>
+		</div>
+		<div class="text-c" style="height: 550px;padding: 10px;margin-bottom:20px;"">
+			<span style="font-family:微软雅黑;font-size:16px;float: left;display:inline-block;width:100%;text-align:left;margin-bottom:10px;">扩展信息</span>
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3">出版社：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value=""placeholder="输入出版社名称" id="publisher" name="publisher"datatype="*0-128" >
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3">内容提供商：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="sourceCP" id="sourceCP" size="1">
+							<option value="">请选择</option>
+							@for(fromSource in fromSourceList){
+								<option value="${fromSource.sourceCp}" >${fromSource.sourceCp}</option>
+							@}	
+						</select>
+					</span>
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">图书短简介：</label>
+				<div class="formControls col-5">
+				<textarea name="shortIntro" wrap="hard" id="shortIntro" cols="" rows="" class="textarea" placeholder="请在这里输入内容(0/250字)" datatype="*0-250" dragonfly="true"  onkeyup="textarealength(this,999)"></textarea>
+					 <p class="textarea-numberbar"><em class="textarea-length">0</em>/250</p> 
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">图书长简介：</label>
+				<div class="formControls col-5">
+					<textarea name="longIntro" wrap="hard" id="longIntro" cols="" rows="" class="textarea" placeholder="请在这里输入内容(0/2048字)" datatype="*0-2048" dragonfly="true"  onkeyup="textarealength(this,3000)"></textarea>
+					<p class="textarea-numberbar"><em class="textarea-length">0</em>/2048</p>
+				</div>
+				<div class="col-4"></div>
+			</div>
+			
+			
+			<!-- <div class="row cl">
+				<label class="form-label col-3">封面图片：</label>
+				<div class="formControls col-5">
+					<img id="img"  width="160px" height="120px" src="${request.contextPath}/images/pic_upload.png" style="float: left;">
+					<div id="filePicker" class="webuploader-container" style="float: left;">
+					<div style="clear: left;margin-left: 10px;">
+					<p>建议上传600*800像素的图片,</p>
+					<p>图片支持后缀为jpg/png格式</p>
+					</div>
+					<div class="uploader-thum-container">
+						<div id="filePicker" class="webuploader-container">
+							<div class="webuploader-pick">选择图片</div>
+								<div id="rt_rt_1agrit9p86a6102613rm2vu1gkr1" style="position: absolute; top: 0px; left: 0px; width: 80px; height: 30px; overflow: hidden; bottom: auto; right: auto;">
+									<input type="file" name="myfiles" id="file" onchange="getpath()" class="" style="cursor:pointer;position:relative;left: 0;top: 0;width:200px;height:130%;opacity:0;font-size:100px;" multiple="multiple" accept="image/*">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> -->
+				<div class="row cl">
+				<label class="form-label col-3">封面图片：</label>
+					<p style="text-align:left;color:#f44336;line-height:35px;">建议上传600*800像素的图片,图片支持后缀为jpg/png格式</p>
+					<!-- <p>图片支持后缀为jpg/png格式</p> -->
+				<div class="formControls col-5">
+					<img id="img"  width="100px" height="133px" src="${request.contextPath}/images/srcimg1.png" style="margin-left:60%;margin-bottom:10px;">
+					<div id="filePicker" class="webuploader-container" style="float: left;margin-left:60%;width:100%;">
+					<div style="clear: left;margin-left: 10px;">
+					</div>
+					<div class="uploader-thum-container">
+						<div id="filePicker" class="webuploader-container" style="text-align:left;">
+							<input class="webuploader-pick" type="button" value="添加" style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:3px 9px;cursor: pointer;float:left;">
+							<input class="clear_url" type="button" value="删除" style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:3px 9px;margin-left:16px;cursor: pointer;">
+							<!-- <div class="webuploader-pick">选择图片</div> -->
+								<div id="rt_rt_1agrit9p86a6102613rm2vu1gkr1" style="width:45px; height: 30px; overflow: hidden; bottom: auto; right: auto;position:absolute;left:0;top:0;">
+									<input type="file" name="myfiles" id="file" onchange="getpath()" class="" style="cursor:pointer;position:relative;left: 0;top: 0;width:200px;height:130%;opacity:0;font-size:100px;" multiple="multiple" accept="image/*">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" value="" name="coverUrl" id="coverUrl">
+			</div>
+		</div>
+	</form>
+	
+	<!-- form3 -->
+	<form action="${request.contextPath}/imgs/addImgs.html?taskId=${taskId}&siteId=${siteId}" method="post" id="imgsfrom"
+	@if(choiceType!=6){
+		hidden="hidden"
+	@}
+	>
+		<div class="text-c" style=" height: 300px;padding: 10px;margin-bottom:20px;"">
+			<span style="font-family:微软雅黑;font-size:16px;float: left;display:inline-block;width:100%;text-align:left;margin-bottom:10px;">基本信息</span>
+			<!-- <hr style="clear: left;"> -->
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3"><span class="c-red">*</span>BOOK_id：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value=""
+						placeholder="输入bookId" id="nlcBookId" name="nlcBookId"
+						datatype="/^\w{1,32}$/" errormsg="请输入1-32位数字或字母"  nullmsg="BOOK_Id不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>标题：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入标题"
+						id="name" name="name" datatype="*1-128" nullmsg="标题不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>作者：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入作者"
+						id="author" name="author" datatype="*1-32" nullmsg="作者不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<!-- <div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>图集来源：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="fromSource" size="1">
+								<option value="1">自建资源</option>
+								<option value="2">移动阅读</option>		
+						</select>
+					</span>
+				</div>
+			</div> -->
+			<input type="hidden" name="fromSource" value="1">
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>分类：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="categoryId" size="1">
+							@for(category in categoryList){
+									<option value="${category.categoryId}" >${category.name}</option>
+							@}	
+						</select>
+					</span>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3" style="line-height:22px;">行业：</label>
+				<div class="formControls col-5">
+					@for(channel in channelList){
+						<div style="width:88px;float:left;text-align:left;line-height:25px;"><input type="checkbox" name="channelId" value="${channel.channelId}" style="margin-right:5px;">${channel.channelName}</div>
+					@}
+				</div>
+			</div>
+		</div>
+		
+		<div class="text-c" style="height: 700px;padding: 10px;margin-bottom:20px;"">
+			<span style="font-family:微软雅黑;font-size:16px;float: left;display:inline-block;width:100%;text-align:left;margin-bottom:10px;">扩展信息</span>
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3">出版社：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value=""placeholder="输入出版社名称" id="publisher" name="publisher"datatype="*0-128" >
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3">内容提供商：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="sourceCP" id="sourceCP" size="1">
+							<option value="">请选择</option>
+							@for(fromSource in fromSourceList){
+								<option value="${fromSource.sourceCp}" >${fromSource.sourceCp}</option>
+							@}	
+						</select>
+					</span>
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">总图片数：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入图片数"
+						id="picsNum" name="picsNum" datatype="n0-4">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">总章数：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入总章数"
+						id="tocalChapters" name="tocalChapters" datatype="n0-11" >
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">总卷数：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入总卷数"
+						id="totalVolumes" name="totalVolumes" datatype="n0-11" nullmsg="作者不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">短简介：</label>
+				<div class="formControls col-5">
+					<textarea name="shortIntro" wrap="hard"  id="shortIntro" cols="" rows="" class="textarea" placeholder="请在这里输入内容(0/250字)" datatype="*0-250" dragonfly="true"  onkeyup="textarealength(this,999)"></textarea>
+					<p class="textarea-numberbar"><em class="textarea-length">0</em>/250</p> 
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">摘要：</label>
+				<div class="formControls col-5">
+					<textarea name="longIntro" wrap="hard" id="longIntro" cols="" rows="" class="textarea" placeholder="请在这里输入内容(0/2048字)" datatype="*0-2000" dragonfly="true"  onkeyup="textarealength(this,3000)"></textarea>
+					 <p class="textarea-numberbar"><em class="textarea-length">0</em>/2048</p> 
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">关键词：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder='输入关键词,可以输入多个 用","分开'
+						id="keywords" name="keywords" datatype="*0-128" >
+				</div>
+				<div class="col-4"></div>
+			</div>
+			
+			<!-- <div class="row cl">
+				<label class="form-label col-3">封面图片：</label>
+				<div class="formControls col-5">
+					<img id="img"  width="160px" height="120px" src="${request.contextPath}/images/pic_upload.png" style="float: left;">
+					<div id="filePicker" class="webuploader-container" style="float: left;">
+					<div style="clear: left;margin-left: 10px;">
+					<p>建议上传600*800像素的图片,</p>
+					<p>图片支持后缀为jpg/png格式</p>
+					</div>
+					<div class="uploader-thum-container">
+						<div id="filePicker" class="webuploader-container">
+							<div class="webuploader-pick">选择图片</div>
+								<div id="rt_rt_1agrit9p86a6102613rm2vu1gkr1" style="position: absolute; top: 0px; left: 0px; width: 80px; height: 30px; overflow: hidden; bottom: auto; right: auto;">
+									<input type="file" name="myfiles" id="file" onchange="getpath()" class="" style="cursor:pointer;position:relative;left: 0;top: 0;width:200px;height:130%;opacity:0;font-size:100px;" multiple="multiple" accept="image/*">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> -->
+				<div class="row cl">
+				<label class="form-label col-3">封面图片：</label>
+					<p style="text-align:left;color:#f44336;line-height:35px;">建议上传600*800像素的图片,图片支持后缀为jpg/png格式</p>
+					<!-- <p>图片支持后缀为jpg/png格式</p> -->
+				<div class="formControls col-5">
+					<img id="img"  width="100px" height="133px" src="${request.contextPath}/images/srcimg1.png" style="margin-left:60%;margin-bottom:10px;">
+					<div id="filePicker" class="webuploader-container" style="float: left;margin-left:60%;width:100%;">
+					<div style="clear: left;margin-left: 10px;">
+					</div>
+					<div class="uploader-thum-container">
+						<div id="filePicker" class="webuploader-container" style="text-align:left;">
+							<input class="webuploader-pick" type="button" value="添加" style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:3px 9px;cursor: pointer;float:left;">
+							<input class="clear_url" type="button" value="删除" style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:3px 9px;margin-left:16px;cursor: pointer;">
+							<!-- <div class="webuploader-pick">选择图片</div> -->
+								<div id="rt_rt_1agrit9p86a6102613rm2vu1gkr1" style="width:45px; height: 30px; overflow: hidden; bottom: auto; right: auto;position:absolute;left:0;top:0;">
+									<input type="file" name="myfiles" id="file" onchange="getpath()" class="" style="cursor:pointer;position:relative;left: 0;top: 0;width:200px;height:130%;opacity:0;font-size:100px;" multiple="multiple" accept="image/*">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" value="" name="coverUrl" id="coverUrl">
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">版权开始时间：</label>
+				<div class="formControls col-5">
+					<input type="text" 
+					 name="copyrightBeginDate" id="copyrightBeginDate3" class="Wdate input-text input-medium" 
+					 onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'copyrightEndDate2\')}' })"   
+					 value="" placeholder="输入版权开始时间" datatype="*0-30" nullmsg="版权开始时间不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">版权结束时间：</label>
+				<div class="formControls col-5">
+					<input type="text" 
+					 name="copyrightEndDate" id="copyrightEndDate3" class="Wdate input-text input-medium" 
+					 onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'copyrightBeginDate2\')}' })" 
+					 value="" placeholder="输入版权结束时间" datatype="*0-30" nullmsg=版权结束时间不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			
+		</div>
+	</form>
+	
+	<!-- form4 -->
+	<form action="${request.contextPath}/audio/addAudio.html?taskId=${taskId}&siteId=${siteId}" method="post" id="audiofrom" 
+	@if(choiceType!=3){
+		hidden="hidden"
+	@}
+	>
+		<div class="text-c" style=" height: 350px;padding: 10px;margin-bottom:20px;"">
+			<span style="font-family:微软雅黑;font-size:16px;float: left;display:inline-block;width:100%;text-align:left;margin-bottom:10px;">基本信息</span>
+			<!-- <hr style="clear: left;"> -->
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3"><span class="c-red">*</span>BOOK_id：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value=""
+						placeholder="输入bookId" id="nlcBookId" name="nlcBookId"
+						datatype="/^\w{1,32}$/" errormsg="请输入1-32位数字或字母"  nullmsg="BOOK_Id不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3">内容提供商：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="sourceCP" id="sourceCP" size="1">
+							<option value="">请选择</option>
+							@for(fromSource in fromSourceList){
+								<option value="${fromSource.sourceCp}" >${fromSource.sourceCp}</option>
+							@}	
+						</select>
+					</span>
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl" >
+				<label class="form-label col-3"><span class="c-red">*</span>主题名：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value=""
+						placeholder="输入主题名" id="name" name="name"
+						datatype="*1-128" nullmsg="主题名不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>作者：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入作者"
+						id="author" name="author" datatype="*1-32" nullmsg="标题不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<!-- <div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>来源：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="fromSource" size="1">
+								<option value="1" selected>自建资源</option>
+								<option value="2">移动阅读</option>		
+						</select>
+					</span>
+				</div>
+			</div> -->
+			<input type="hidden" name="fromSource" value="1">
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>分集总数：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入分集总数"
+						id="tocalChapters" name="tocalChapters" datatype="n1-11" nullmsg="分集总数不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>分类：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="categoryId" size="1">
+							@for(category in categoryList){
+									<option value="${category.categoryId}" >${category.name}</option>
+							@}	
+						</select>
+					</span>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3" style="line-height:22px;">行业：</label>
+				<div class="formControls col-5">
+					@for(channel in channelList){
+						<div style="width:88px;float:left;text-align:left;line-height:25px;"><input type="checkbox" name="channelId" value="${channel.channelId}" style="margin-right:5px;">${channel.channelName}</div>
+					@}
+				</div>
+			</div>
+		</div>
+		<div class="text-c" style="height: 700px;padding: 10px;margin-bottom:20px;"">
+			<span style="font-family:微软雅黑;font-size:16px;float: left;display:inline-block;width:100%;text-align:left;margin-bottom:10px;">扩展信息</span>
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3">出版社：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value=""placeholder="输入出版社名称" id="publisher" name="publisher"datatype="*0-128" nullmsg="不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			
+			<div class="row cl">
+				<label class="form-label col-3">短简介：</label>
+				<div class="formControls col-5">
+					<textarea name="shortIntro" wrap="hard"  id="shortIntro" cols="" rows="" class="textarea" placeholder="请在这里输入内容(0/250字)" datatype="*0-250" dragonfly="true"  onkeyup="textarealength(this,999)"></textarea>
+					<p class="textarea-numberbar"><em class="textarea-length">0</em>/250</p>
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">长简介：</label>
+				<div class="formControls col-5">
+					<textarea name="longIntro" wrap="hard" id="longIntro" cols="" rows="" class="textarea" placeholder="请在这里输入内容(0/2048字)" datatype="*0-120" dragonfly="true"  onkeyup="textarealength(this,999)"></textarea>
+				    <p class="textarea-numberbar"><em class="textarea-length">0</em>/2048</p>
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">播音者：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入播音者"	
+					id="announcerName" name="announcerName" datatype="*0-32" >
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">编剧：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入编剧姓名"id="writer" name="writer" datatype="*0-32" >
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">导演：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入导演"
+						id="director" name="director" datatype="*0-32">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			
+			<div class="row cl">
+				<label class="form-label col-3">关键词：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder='输入关键词,可添加多个用","隔开'
+						id="keywords" name="keywords" datatype="*0-128" >
+				</div>
+				<div class="col-4"></div>
+			</div>
+			
+			
+			<!-- <div class="row cl">
+				<label class="form-label col-3">封面图片：</label>
+				<div class="formControls col-5">
+					<img id="img"  width="160px" height="120px" src="${request.contextPath}/images/pic_upload.png" style="float: left;">
+					<div id="filePicker" class="webuploader-container" style="float: left;">
+					<div style="clear: left;margin-left: 10px;">
+					<p>建议上传600*800像素的图片,</p>
+					<p>图片支持后缀为jpg/png格式</p>
+					</div>
+					<div class="uploader-thum-container">
+						<div id="filePicker" class="webuploader-container">
+							<div class="webuploader-pick">选择图片</div>
+								<div id="rt_rt_1agrit9p86a6102613rm2vu1gkr1" style="position: absolute; top: 0px; left: 0px; width: 80px; height: 30px; overflow: hidden; bottom: auto; right: auto;">
+									<input type="file" name="myfiles" id="file" onchange="getpath()" class="" style="cursor:pointer;position:relative;left: 0;top: 0;width:200px;height:130%;opacity:0;font-size:100px;" multiple="multiple" accept="image/*">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> -->
+				<div class="row cl">
+				<label class="form-label col-3">封面图片：</label>
+					<p style="text-align:left;color:#f44336;line-height:35px;">建议上传600*800像素的图片,图片支持后缀为jpg/png格式</p>
+					<!-- <p>图片支持后缀为jpg/png格式</p> -->
+				<div class="formControls col-5">
+					<img id="img"  width="100px" height="133px" src="${request.contextPath}/images/srcimg1.png" style="margin-left:60%;margin-bottom:10px;">
+					<div id="filePicker" class="webuploader-container" style="float: left;margin-left:60%;width:100%;">
+					<div style="clear: left;margin-left: 10px;">
+					</div>
+					<div class="uploader-thum-container">
+						<div id="filePicker" class="webuploader-container" style="text-align:left;">
+							<input class="webuploader-pick" type="button" value="添加" style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:3px 9px;cursor: pointer;float:left;">
+							<input class="clear_url" type="button" value="删除" style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:3px 9px;margin-left:16px;cursor: pointer;">
+							<!-- <div class="webuploader-pick">选择图片</div> -->
+								<div id="rt_rt_1agrit9p86a6102613rm2vu1gkr1" style="width:45px; height: 30px; overflow: hidden; bottom: auto; right: auto;position:absolute;left:0;top:0;">
+									<input type="file" name="myfiles" id="file" onchange="getpath()" class="" style="cursor:pointer;position:relative;left: 0;top: 0;width:200px;height:130%;opacity:0;font-size:100px;" multiple="multiple" accept="image/*">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" value="" name="coverUrl" id="coverUrl">
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">版权开始时间：</label>
+				<div class="formControls col-5">
+					<input type="text" 
+					 name="copyrightBeginDate" id="copyrightBeginDate4" class="Wdate input-text input-medium" 
+					 onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'copyrightEndDate4\')}' })"   
+					 value="" placeholder="输入版权开始时间" datatype="*0-30" nullmsg="版权开始时间不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">版权结束时间：</label>
+				<div class="formControls col-5">
+					<input type="text" 
+					 name="copyrightEndDate" id="copyrightEndDate4" class="Wdate input-text input-medium" 
+					 onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'copyrightBeginDate4\')}' })" 
+					 value="" placeholder="输入版权结束时间" datatype="*0-30" nullmsg=版权结束时间不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+		</div>
+	</form>	
+	
+	<!-- form5 -->
+	<form action="${request.contextPath}/vedio/addVedio.html?taskId=${taskId}&siteId=${siteId}" method="post" id="videofrom" 
+	@if(choiceType!=4){
+		hidden="hidden"
+	@}
+	>
+		<div class="text-c" style=" height: 350px;padding: 10px;margin-bottom:20px;"">
+			<span style="font-family:微软雅黑;font-size:16px;float: left;display:inline-block;width:100%;text-align:left;margin-bottom:10px;">基本信息</span>
+			<!-- <hr style="clear: left;"> -->
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3"><span class="c-red">*</span>BOOK_id：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value=""
+						placeholder="输入bookId" id="nlcBookId" name="nlcBookId"
+						datatype="/^\w{1,32}$/" errormsg="请输入1-32位数字或字母"  nullmsg="BOOK_Id不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl" >
+				<label class="form-label col-3"><span class="c-red">*</span>主题名：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value=""
+						placeholder="输入主题名" id="name" name="name"
+						datatype="*1-128" nullmsg="主题名不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>主讲人：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="请输入主讲人"
+						id="author" name="author" datatype="*1-32" nullmsg="主讲人不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>分集总数：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入分集数"
+						id="tocalChapters" name="tocalChapters" datatype="n1-11" nullmsg="分集数量不能为空 ">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<!-- <div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>来源：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="fromSource" size="1">
+								<option value="1" selected>自建资源</option>
+								<option value="2">移动阅读</option>		
+						</select>
+					</span>
+				</div>
+			</div> -->
+			<input type="hidden" name="fromSource" value="1">
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>分类：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="categoryId" size="1">
+							@for(category in categoryList){
+									<option value="${category.categoryId}" >${category.name}</option>
+							@}	
+						</select>
+					</span>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3" style="line-height:22px;">行业：</label>
+				<div class="formControls col-5">
+					@for(channel in channelList){
+						<div style="width:88px;float:left;text-align:left;line-height:25px;"><input type="checkbox" name="channelId" value="${channel.channelId}" style="margin-right:5px;">${channel.channelName}</div>
+					@}
+				</div>
+			</div>
+		</div>
+		<div class="text-c" style="height: 800px;padding: 10px;margin-bottom:20px;"">
+			<span style="font-family:微软雅黑;font-size:16px;float: left;display:inline-block;width:100%;text-align:left;margin-bottom:10px;">扩展信息</span>
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3">出版社：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入出版社名称" id="publisher" name="publisher"datatype="*0-128" >
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">主演：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入主演,多个用','分隔"
+						id="mainActor" name="mainActor" datatype="*0-32" nullmsg="主演不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl" style="margin-top: 10px;">
+				<label class="form-label col-3">内容提供商：</label>
+				<div class="formControls col-5">
+					<span class="select-box" > 
+						<select class="select" name="sourceCP" id="sourceCP" size="1">
+							<option value="">请选择</option>
+							@for(fromSource in fromSourceList){
+								<option value="${fromSource.sourceCp}" >${fromSource.sourceCp}</option>
+							@}	
+						</select>
+					</span>
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">短简介：</label>
+				<div class="formControls col-5">
+					<textarea name="shortIntro" wrap="hard"  id="shortIntro" cols="" rows="" class="textarea" placeholder="请在这里输入内容(0/250字)" datatype="*0-250" dragonfly="true"  onkeyup="textarealength(this,999)"></textarea>
+					<p class="textarea-numberbar"><em class="textarea-length">0</em>/250</p>
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">摘要：</label>
+				<div class="formControls col-5">
+					<textarea name="longIntro" wrap="hard" id="longIntro" cols="" rows="" class="textarea" placeholder="请在这里输入内容(0/2048字)" datatype="*0-120" dragonfly="true"  onkeyup="textarealength(this,999)"></textarea>
+					<p class="textarea-numberbar"><em class="textarea-length">0</em>/2048</p>
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">演员：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder='输入演员,多个用","分割'	id="actor" name="actor" datatype="*0-256" nullmsg="标题不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">编剧：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入编剧"id="writer" name="writer" datatype="*0-32" >
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">导演：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder="输入导演"
+						id="director" name="director" datatype="*0-32" nullmsg="">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">关键词：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="" placeholder='输入关键词,可添加多个用","隔开'
+						id="keywords" name="keywords" datatype="*0-128" >
+				</div>
+				<div class="col-4"></div>
+			</div>
+			
+			
+			<!-- <div class="row cl">
+				<label class="form-label col-3">封面图片：</label>
+				<div class="formControls col-5">
+					<img id="img"  width="160px" height="120px" src="${request.contextPath}/images/pic_upload.png" style="float: left;">
+					<div id="filePicker" class="webuploader-container" style="float: left;">
+					<div style="clear: left;margin-left: 10px;">
+					<p>建议上传600*800像素的图片,</p>
+					<p>图片支持后缀为jpg/png格式</p>
+					</div>
+					<div class="uploader-thum-container">
+						<div id="filePicker" class="webuploader-container">
+							<div class="webuploader-pick">选择图片</div>
+								<div id="rt_rt_1agrit9p86a6102613rm2vu1gkr1" style="position: absolute; top: 0px; left: 0px; width: 80px; height: 30px; overflow: hidden; bottom: auto; right: auto;">
+									<input type="file" name="myfiles" id="file" onchange="getpath()" class="" style="cursor:pointer;position:relative;left: 0;top: 0;width:200px;height:130%;opacity:0;font-size:100px;" multiple="multiple" accept="image/*">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> -->
+				<div class="row cl">
+				<label class="form-label col-3">封面图片：</label>
+					<p style="text-align:left;color:#f44336;line-height:35px;">建议上传600*800像素的图片,图片支持后缀为jpg/png格式</p>
+					<!-- <p>图片支持后缀为jpg/png格式</p> -->
+				<div class="formControls col-5">
+					<img id="img"  width="100px" height="133px" src="${request.contextPath}/images/srcimg1.png" style="margin-left:60%;margin-bottom:10px;">
+					<div id="filePicker" class="webuploader-container" style="float: left;margin-left:60%;width:100%;">
+					<div style="clear: left;margin-left: 10px;">
+					</div>
+					<div class="uploader-thum-container">
+						<div id="filePicker" class="webuploader-container" style="text-align:left;">
+							<input class="webuploader-pick" type="button" value="添加" style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:3px 9px;cursor: pointer;float:left;">
+							<input class="clear_url" type="button" value="删除" style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:3px 9px;margin-left:16px;cursor: pointer;">
+							<!-- <div class="webuploader-pick">选择图片</div> -->
+								<div id="rt_rt_1agrit9p86a6102613rm2vu1gkr1" style="width:45px; height: 30px; overflow: hidden; bottom: auto; right: auto;position:absolute;left:0;top:0;">
+									<input type="file" name="myfiles" id="file" onchange="getpath()" class="" style="cursor:pointer;position:relative;left: 0;top: 0;width:200px;height:130%;opacity:0;font-size:100px;" multiple="multiple" accept="image/*">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" value="" name="coverUrl" id="coverUrl">
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">版权开始时间：</label>
+				<div class="formControls col-5">
+					<input type="text" 
+					 name="copyrightBeginDate" id="copyrightBeginDate5" class="Wdate input-text input-medium" 
+					 onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'copyrightEndDate5\')}' })"   
+					 value="" placeholder="输入版权开始时间" datatype="*0-30" nullmsg="版权开始时间不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">版权结束时间：</label>
+				<div class="formControls col-5">
+					<input type="text" 
+					 name="copyrightEndDate" id="copyrightEndDate5" class="Wdate input-text input-medium" 
+					 onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'copyrightBeginDate5\')}' })" 
+					 value="" placeholder="输入版权结束时间" datatype="*0-30" nullmsg=版权结束时间不能为空">
+				</div>
+				<div class="col-4"></div>
+			</div>
+		</div>
+	</form>	
+	
+	<div class="text-c"style=" height: 40px;overflow:hidden;width:90%;padding-top:20px;margin-left:15%;">
+		<div class="row cl">
+			<div class=" col-offset-3" style="float: left;overflow:hidden;">
+				<input class="btn btn-primary radius" type="submit" id="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+			<div class=" col-offset-3" style="float: left;margin-left:5%;">
+				<input class="btn btn-primary radius" type="button" style="background-color:#B9D3EE" id="Reset" value="&nbsp;&nbsp;重置&nbsp;&nbsp;">
+			</div>
+		</div>
+	</div>
+</div>
+</div>	
+</div>
+@};
+@var js = {
+<script type="text/javascript"src="${request.contextPath}/lib/Validform/5.3.2/Validform.min.js"></script>
+<script type="text/javascript"src="${request.contextPath}/lib/jquery.form.js"></script>
+<script>
+	
+	$(".clear_url").click(function(){
+			/* $("#img").attr("src","../images/srcimg1.png"); */
+			$(this).parents("#filePicker").siblings("#img").attr("src","../images/srcimg1.png");
+			$(this).parents(".col-5").siblings("#coverUrl").val("");
+		})
+	var form="";	
+	$(document).ready(function() {
+		showHidden();
+	}); 
+	
+	function showHidden() {
+		var type=$("#choiceType").val();
+		if(type==1||type==2||type==7){
+			$("#bookfrom").show();
+			$("#documentfrom").hide();
+			$("#imgsfrom").hide();
+			$("#audiofrom").hide();
+			$("#videofrom").hide();
+			form="bookfrom";
+			validSubmitFormAndRefreshParent('bookfrom');
+		}else if(type==5){
+			$("#bookfrom").hide();
+			$("#documentfrom").show();
+			$("#imgsfrom").hide();
+			$("#audiofrom").hide();
+			$("#videofrom").hide();
+			form="documentfrom";
+			validSubmitFormAndRefreshParent('documentfrom');
+		}else if(type==6){
+			$("#bookfrom").hide();
+			$("#documentfrom").hide();
+			$("#imgsfrom").show();
+			$("#audiofrom").hide();
+			$("#videofrom").hide();
+			form="imgsfrom";
+			validSubmitFormAndRefreshParent('imgsfrom');
+		}else if(type==3){
+			$("#bookfrom").hide();
+			$("#documentfrom").hide();
+			$("#imgsfrom").hide();
+			$("#audiofrom").show();
+			$("#videofrom").hide();
+			form="audiofrom";
+			validSubmitFormAndRefreshParent('audiofrom');
+		}else if(type==4){
+			$("#bookfrom").hide();
+			$("#documentfrom").hide();
+			$("#imgsfrom").hide();
+			$("#audiofrom").hide();
+			$("#videofrom").show();
+			form="videofrom";
+			validSubmitFormAndRefreshParent('videofrom');
+		}
+	/* 	$("form input").val("");
+		$("input[type=checkbox]").attr("checked",false);
+		$("form textarea").val("");
+		$(".col-4 span").removeClass().addClass("Validform_checktip"); */
+	}
+	$("#Reset").click(function(){
+		$("form input").val("");
+		$("#filePicker .webuploader-pick").val("添加");
+		$("#filePicker .clear_url").val("删除");
+		$("form #img").attr("src","../images/srcimg1.png");
+		$("form textarea").val("");
+		$(".col-4 span").removeClass().addClass("Validform_checktip");
+		layer.msg("重置成功");
+	})
+	$("#submit").click(function(){
+		var type=$("#choiceType").val();
+		var option=$("#"+form+" #categoryId option:selected");
+		$("#"+form+" #categoryName").val(option.text());
+		$("#"+form).submit();
+	})
+	/* function clp() {
+		var file= "#"+form+" #file";
+		$(file).click();
+	} */
+	function getpath() {
+		fileupload();
+	}
+	function fileupload() {
+		$.ajaxFileUpload({
+			url : "../ep/uploadImg.html",
+			type : 'POST',
+			secureuri : false,
+			fileElementId :form+" #file", // 上传文件的id、name属性名
+			dataType : 'text',
+			cache : false,
+			timeout : 300000,
+			error : function(e) {
+				layer.msg(e)
+			},
+			success : function(res) {
+			var json = eval('('+res+')');
+               if(json.resultCode==1000){
+                		data=json.returnObject
+						var img="#"+form+" #img";
+						$(img).attr("src",data.fileUrl);
+						$("#"+form+" #coverUrl").val(data.fileUrl);
+						layer.msg("上传成功");
+				}else{
+					layer.msg(data.msg);
+				}
+			}
+		});
+	}
+	
+</script>
+@}; 
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

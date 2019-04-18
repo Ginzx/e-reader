@@ -1,0 +1,255 @@
+@var head = {
+	<title>任务详情</title>
+	<style>
+	.loadingBox{position:fixed;top:0;bottom:0;left:0;right:0;background-color:rgba(0,0,0,.6);z-index:9999;}
+	.loadingBox img{width:60px;height:60px;position:absolute;top:50%;left:50%;margin-top:-30px;margin-left:-30px;}
+	</style>
+@};
+@var content = {
+
+	<div class="pd-20">
+		<div class="text-c">
+			<form id="searchForm" action="${request.contextPath}/taskHandle/qryTaskHandleCount.html?taskId=${taskId}&siteId=${siteId}" method="post" class="liform">
+				<li>
+					<b>资源名称：</b>
+					<input type="text" class="input-text" style="width:150px" placeholder="输入资源名称" id="name" name="name" value="${name!''}">
+				</li>
+				<li>
+					<b>作者：</b>
+					<input type="text" class="input-text" style="width:150px" placeholder="输入作者" id="author" name="author" value="${author!''}">
+				</li>
+				<li>
+					<b>执行状态：</b>
+					<span class="select-box" style="width:150px">
+						<select name="dataStatus" class="select">
+							<option value="">全部</option>
+							<option value="0"
+							@if(dataStatus!'' == 0){
+							 selected
+							@} 
+							>未开始</option>
+						    <option value="1"
+						    @if(dataStatus!'' == 1){
+							 selected
+							@}
+						    >处理中</option>
+						     <option value="2"
+						    @if(dataStatus!'' == 2){
+							 selected
+							@}
+						    >处理完成</option>
+						 </select>
+					 </span>
+				</li>
+				<li>
+					<b>执行结果：</b>
+					<span class="select-box" style="width:150px">
+						<select name="dataResult" class="select">
+							<option value="">全部</option>
+							<option value="0"
+							@if(dataResult!'' == 0){
+							 selected
+							@} 
+							>暂无</option>
+						    <option value="1"
+						    @if(dataResult!'' == 1){
+							 selected
+							@}
+						    >成功</option>
+						     <option value="2"
+						    @if(dataResult!'' == 2){
+							 selected
+							@}
+						    >失败</option>
+						 </select>
+					 </span>
+					<button type="submit" class="btn btn-success" id="search"><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+			</li>
+			</form>
+		</div>
+		<div class="cl pd-5 bg-1 bk-gray mt-20" style="padding:7px;"> 
+			@if(uploadFile!false){
+			<span class="l">
+				<div  style="margin-right: 10px; float: left;">
+					@if(addResInfo!false){
+						<a href="javascript:;"onclick="layer_show_close_reload('添加资源','${request.contextPath}/taskHandle/addResInfo.html?taskId=${taskId}&siteId=${siteId}')" class="btn btn-primary radius" style="margin-right:5px;"><i class="Hui-iconfont">&#xe600;</i> 添加资源</a>
+					@}
+					@if(delAllaskHandle!false){
+					   <a href="javascript:;" onclick="dels('${request.contextPath}/taskHandle/delAllaskHandle.html?taskId=${taskId}&resType=${type!''}')" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> 
+					@}
+					<a href="javascript:;" onclick="layer_show_close_reload('导入元数据','${request.contextPath}/taskHandle/addBaseResInfo.html?taskId=${taskId}&siteId=${siteId}')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe642;</i>导入元数据</a>
+				</div>
+				@if(noStartCount!0>0){
+				<div  style=" float: left;">
+					<div class="uploader-thum-container">
+							<div id="filePicker" class="webuploader-container">
+						<div class="btn btn-primary radius"><i class="Hui-iconfont">&#xe642;</i>导入对象数据</div>
+						<div id="rt_rt_1agrit9p86a6102613rm2vu1gkr1" style="position: absolute; top: 0px; left: 0px; width:120px; height: 30px; overflow: hidden; bottom: auto; right: auto;">
+							<input type="file" name="myfiles" id="object" onchange="fileupload('object')"   style="cursor:pointer;position:absolute;left: 0;top: 0;width:240px;height:130%;opacity:0;font-size:100px;"
+							multiple="multiple" accept="
+							@if(taskBase.dataType==1||taskBase.dataType==2){
+								.zip
+							@}else {
+								.xlsx,.xls
+							@}
+							">
+						</div>
+						</div></div>
+					<input type="hidden" value="${taskBase.objDataFtpPath}" name="coverUrl" id="coverUrl" >
+				</div>
+				@}
+				@if(startTask!false&&taskBase.dataNum>0&&taskBase.status==0&&((taskBase.objDataFileUrl!=''&&taskBase.objDataFileUrl!=null)||(taskBase.objDataFtpPath!=''&&taskBase.objDataFtpPath!=null))){
+				<div  style=" float: left;margin-left: 10px;"id="startDiv">	
+					<a title="开始任务" href="javascript:;" onclick="start()" class="btn btn-primary radius" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i>开始任务</a>
+				</div>
+				@}
+			</span>
+			@}
+			<span class="r">
+				每页显示：
+				<select id="set_pagesize" onchange="setPageSize(this.options[this.options.selectedIndex].value,'${request.contextPath}/','searchForm')">
+					<option value="10">10条</option>
+					<option value="25">25条</option>
+					<option value="50">50条</option>
+					<option value="100">100条</option>
+				</select> 
+				&nbsp;&nbsp;总数：<strong id="total">${total}</strong> 条
+			</span> 
+		</div>
+		<table class="table table-border table-bordered table-bg table-hover tablesorter">
+			<thead>
+				<tr class="text-c">
+					<th width="5%"><input type="checkbox" name="" value=""></th>
+					<th width="15%">资源名称</th>
+					<th width="10%">BOOK_ID</th>
+					<th width="10%">作者</th>
+					<th width="10%">资源类型</th>
+					<th width="10%">执行状态</th>
+					<th width="10%">执行结果</th>
+					<th width="10%">失败原因</th>
+					<th width="10%">创建时间</th>
+					<th width="10%">操作</th>
+				</tr>
+			</thead>
+			<tbody id="dataContent">
+				
+			</tbody>
+		</table>
+		<div id="pager" style="padding-top:5px;float:right"></div>
+	</div>
+	<!-- <footer class="footer"></footer> -->
+	<div class="loadingBox" style="display:none">
+		<img src="${request.contextPath}/images/loading_072.gif">
+	</div>
+@};
+@var js = {
+	<script>
+		$(document).ready(function () {
+			//初始化表单
+			pager('${request.contextPath}/taskHandle/qryTaskHandleList.html', {taskId:"${taskId!''}",name:"${name!''}",author:"${author!''}",type:"${type!''}",keywords:"${keywords!''}",dataStatus:"${dataStatus!''}",dataResult:"${dataResult!''}",siteId:"${siteId!''}"}, ${total}, page_size,$(".laypage_curr").text());
+		});
+		
+	function clp(a) {
+		$("#"+a).click();
+	}
+	function fileupload(b) {
+	 $(".loadingBox").show();
+		$.ajaxFileUpload({
+			url : "../taskHandle/uploadFile.html",
+			type : 'POST',
+			secureuri : false,
+			fileElementId :b, // 上传文件的id、name属性名
+			data : {taskId:${taskId}},
+			dataType : 'text',
+			cache : false,
+			timeout : 300000,
+			error : function(e) {
+				layer.msg(e)
+			},
+			success : function(result) {
+				$(".loadingBox").hide();
+				var objResult = eval('('+result+')');          	
+        		var resultCode = objResult.resultCode;
+        		var data =  objResult.returnObject;   
+             	if(resultCode==1000){
+             		layer.msg("上传成功");
+             		window.location.reload();
+       			}else if(resultCode==9999){
+            		layer.msg("上传失败,对象数据个数超过限制");
+            	}else{
+            		layer.msg("上传失败,系统异常");
+            	}
+			}
+		});
+	}
+	function backToList(){
+		var parentIndex = parent.layer.getFrameIndex(window.name);
+		parent.localAjaxReload();
+		parent.layer.close(parentIndex);
+	}
+	function localAjaxReload(){
+		pager('${request.contextPath}/taskHandle/qryTaskHandleList.html', {taskId:"${taskId!''}",name:"${name!''}",author:"${author!''}",type:"${type!''}",keywords:"${keywords!''}",dataStatus:"${dataStatus!''}",dataResult:"${dataResult!''}",siteId:"${siteId!''}"}, ${total}, page_size,$(".laypage_curr").text());
+	}
+	//关闭子页面后并刷新父页面
+		function layer_show_close_reload(title,url){
+			layer.open({
+				type: 2,
+				title: title,
+				content: url,
+				closeBtn: 1, //显示关闭按钮
+				area:['100%','100%'],
+				end: function () {//关闭后刷新父页面               	
+            		$("#search").click();
+            	}
+			});
+		}
+	function start(){
+		startAction('','${request.contextPath}/taskHandle/startTask.html?taskId=${taskBase.taskId}','确认后数据马上匹配，可能会消耗较多时间，请耐心等待！');
+	}
+	function startAction(id, url,msg){
+		var options = {
+			id : id,
+			confirm	: msg,
+			ajaxurl : url
+		};
+		startRequest(options);
+	}
+	function startRequest(options){
+	var defaults = {
+			id : "",
+			confirm	: "确认操作选中的记录？",
+			ajaxtype : "POST",
+			ajaxurl : "",
+			ajaxdata : {}
+		};
+	var op = $.extend({}, defaults, options);
+	layer.confirm(op.confirm, {
+	    btn: ['确定','取消'] //按钮
+	}, function(){
+		$("#startDiv").hide();
+		var ajaxOptions = {
+    		type : op.ajaxtype,
+    		dataType : 'json',
+    		url : op.ajaxurl,
+    		data : $.extend({}, op.ajaxdata, {id : op.id}),
+	        error : function(e){
+	        	layer.msg('请求错误');
+	        },
+	        success : function(e){
+	        	if(e.code == 200){
+	        		localAjaxReload();
+	        	}
+	        	else{
+	        		layer.msg('操作失败:'+e.msg);
+	        	}
+	        }
+    	};
+    	commmonAjax(ajaxOptions);
+    	layer.closeAll('dialog');
+	}, function(){
+	    
+	});
+}
+	</script>
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

@@ -23,8 +23,32 @@ public class ManageLogDao {
 	@Resource
 	private JdbcTemplate jdbcTemplate;
 
-	public List<Managerlog> Select(Managerlog managerlog) {
+	public List<Managerlog> Select(Integer offset, Integer length, Managerlog managerlog) {
 		String sql = "select * from manager_log where 1=1 ";
+		List<Object> sqlParams = new ArrayList<Object>();
+		if (managerlog != null) {
+			if (managerlog.getAccount() != "") {
+				sql += "and account like ? ";
+				sqlParams.add("%" + managerlog.getAccount() + "%");
+			}
+			if (managerlog.getRemark() != "") {
+				sql += "and remark like ? ";
+				sqlParams.add("%" + managerlog.getRemark() + "%");
+			}
+			sql += " ORDER BY Create_time DESC limit ?,?";
+			sqlParams.add(offset);
+			sqlParams.add(length);
+		}
+		try {
+			RowMapper<Managerlog> rowMapper = BeanPropertyRowMapper.newInstance(Managerlog.class);
+			return this.jdbcTemplate.query(sql, sqlParams.toArray(new Object[sqlParams.size()]), rowMapper);
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
+	}
+
+	public Integer CountManagelog(Managerlog managerlog) {
+		String sql = "select count(*) from manager_log where 1=1 ";
 		List<Object> sqlParams = new ArrayList<Object>();
 		if (managerlog != null) {
 			if (!StringUtil.isEmpty(managerlog.getAccount())) {
@@ -35,11 +59,11 @@ public class ManageLogDao {
 				sql += "and remark like ? ";
 				sqlParams.add("%" + managerlog.getRemark() + "%");
 			}
-			sql += "ORDER BY Create_time DESC ";
+			sql += " ORDER BY Create_time DESC ";
 		}
 		try {
-			RowMapper<Managerlog> rowMapper = BeanPropertyRowMapper.newInstance(Managerlog.class);
-			return this.jdbcTemplate.query(sql, sqlParams.toArray(new Object[sqlParams.size()]), rowMapper);
+			return this.jdbcTemplate.queryForObject(sql,
+					sqlParams.toArray(new Object[sqlParams.size()]), Integer.class);
 		} catch (IndexOutOfBoundsException e) {
 			return null;
 		}
@@ -66,8 +90,8 @@ public class ManageLogDao {
 		}
 	}
 
-	public boolean delManagerlog(Managerlog managerlog){
-		String sql="delete from manager_log where id=?";
+	public boolean delManagerlog(Managerlog managerlog) {
+		String sql = "delete from manager_log where id=?";
 		try {
 			return this.jdbcTemplate.update(sql, managerlog.getId()) > 0 ? true : false;
 		} catch (Exception e) {

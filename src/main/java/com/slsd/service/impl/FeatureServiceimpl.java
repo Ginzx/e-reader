@@ -77,7 +77,7 @@ public class FeatureServiceimpl implements FeatureService {
 	@Override
 	public List<TreeNode> getMenuTreeNodes(int mid) throws Exception {
 		List<TreeNode> treeNodes = new ArrayList<TreeNode>();
-		List<Feature> Menus = featureDao.Selectall();
+		List<Feature> Menus = featureDao.Selectall(0,1000,null);
 		List<Feature> menus = featureDao.SelectManagerFeature(mid);
 		TreeNode treeNode = new TreeNode();
 		treeNode.setId(0);
@@ -90,7 +90,7 @@ public class FeatureServiceimpl implements FeatureService {
 			treeNode = new TreeNode();
 			treeNode.setId(menu.getfId());
 			treeNode.setName(menu.getfName());
-			if (menu.getParent_id()== 0) {
+			if (menu.getParent_id() == 0) {
 				treeNode.setIsParent(true);
 			} else {
 				treeNode.setIsParent(false);
@@ -124,10 +124,26 @@ public class FeatureServiceimpl implements FeatureService {
 			if (!StringUtil.isEmpty(menuId)) {
 				int fId = Integer.parseInt(menuId);
 				if (fId > 0) {
-					featureDao.addManagerFeature(mid,fId);
+					featureDao.addManagerFeature(mid, fId);
 				}
 			}
 		}
 	}
+
+	@Override
+	public Integer MenuCount(Feature feature) {
+		return featureDao.MenuCount(feature);
+	}
+
+	@Override
+	public List<Feature> Selectall(Integer offset, Integer length, Feature feature) {
+		return featureDao.Selectall((offset-1)*length, length, feature);
+	}
+
+	@Override
+	public Feature selfeaturebyid(Integer fId) {
+		return featureDao.selfeaturebyid(fId);
+	}
+
 
 }

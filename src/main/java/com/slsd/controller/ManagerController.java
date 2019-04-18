@@ -5,6 +5,7 @@ import com.slsd.service.FeatureService;
 import com.slsd.service.ManagerService;
 import com.slsd.service.ManagerlogService;
 import com.slsd.util.ContextUtils;
+import com.slsd.util.RC4Util;
 import com.slsd.util.SessionUtils;
 import com.slsd.util.StringUtil;
 import org.springframework.stereotype.Controller;
@@ -80,7 +81,7 @@ public class ManagerController extends BaseController {
 		manager.setStatus(status);
 		ModelAndView mv = new ModelAndView("/manage/list");
 		try {
-			List<Manager> managers = managerService.selectmanager(curr - 1, size, manager);
+			List<Manager> managers = managerService.selectmanager(curr , size, manager);
 			mv.addObject("managers", managers);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -234,7 +235,7 @@ public class ManagerController extends BaseController {
 	 *
 	 * @param request
 	 * @param response
-	 * @param mId
+	 * @param
 	 * @return
 	 */
 
@@ -297,6 +298,70 @@ public class ManagerController extends BaseController {
 				featureService.setMenus(mid, fid);
 				respSuccessMsg(response, null, "菜单设置成功");
 				managerLog.setRemark("成功");
+			}
+			managerlogService.AddManagelog(managerLog);
+		} catch (Exception e) {
+			respErrorMsg(response, "操作失败");
+			managerLog.setRemark("系统异常");
+			managerlogService.AddManagelog(managerLog);
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 添加用户——打开页面
+	 * @return
+	 */
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	public ModelAndView add(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("/manage/add");
+		try {
+			Manager Loginmanager = (Manager) SessionUtils.getAttr(request, "ManagerInfo");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+
+	/**
+	 * 添加用户——提交
+	 * @param request
+	 * @param response
+	 * @param account
+	 * @param name
+	 * @param status
+	 */
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public void addUser(HttpServletRequest request, HttpServletResponse response,
+						@RequestParam() String account,
+						@RequestParam() String name,
+						@RequestParam() String enPwd,
+						@RequestParam() Integer status
+					) {
+		Manager Loginmanager = (Manager) SessionUtils.getAttr(request, "ManagerInfo");
+		Managerlog managerLog = new Managerlog();
+		Manager manager=new Manager();
+
+		//操作日志
+		managerLog.setmId(Loginmanager.getmId());
+		managerLog.setCreateTime(new Date());
+		managerLog.setContent("添加管理员菜单");
+		managerLog.setAccount(Loginmanager.getAccount());
+		managerLog.setIp(ContextUtils.getIpAddr(request));
+
+		try {
+			manager.setAccount(account);
+			manager.setName(name);
+			manager.setPwd(enPwd);
+			manager.setStatus(status);
+			manager.setCreateTime(new Date());
+			// 添加数据
+			if (managerService.addmanager(manager)) {
+				respSuccessMsg(response, null, "添加成功");
+				managerLog.setRemark("成功");
+			} else {
+				respSuccessMsg(response, null, "添加失败");
+				managerLog.setRemark("失败");
 			}
 			managerlogService.AddManagelog(managerLog);
 		} catch (Exception e) {

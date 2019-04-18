@@ -1,0 +1,35 @@
+@if(menus.~size<1){
+<!-- 无数据提示 -->
+<tr class="text-c">
+    <td valign="top" colspan="10">没有找到匹配的记录</td>
+</tr>
+@}else{
+@for(menu in menus){
+<tr class="text-c">
+    <td>
+        <input type="checkbox" value="${menu.fId}" name="chkId">
+    </td>
+    <td>
+        ${menu.fName!}
+    </td>
+    <td>${menu.parentAdress!}</td>
+    <td>${menu.parent_id!}</td>
+    <td class="td-manage">
+        <a title="编辑" href="javascript:;"
+           onclick="layer_show('修改菜单','${request.contextPath}/menu/update.html?fid=${menu.fId}','800','500')" class="ml-5"
+           style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i>修改
+        </a>
+        <a title="删除" href="javascript:;" onclick="del('${menu.fId}', '${request.contextPath}/menu/delete.html?fid=${menu.fId}')"
+           class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i>删除
+        </a>
+    </td>
+</tr>
+@}
+<script>
+    $(document).ready(function () {
+        //排序更新(防止出现上一页数据)
+        $(".tablesorter").trigger("update");
+    });
+</script>
+@}
+

@@ -29,5 +29,11 @@ public interface FeatureService {
 
 	List<TreeNode> getMenuTreeNodes(int mid) throws Exception;
 
-	public void setMenus(int mid, String menuIds) throws Exception ;
+	public void setMenus(int mid, String menuIds) throws Exception;
+
+	public Integer MenuCount(Feature feature);
+
+	public List<Feature> Selectall(Integer offset, Integer length, Feature feature);
+
+	public Feature selfeaturebyid(Integer fId);
 }

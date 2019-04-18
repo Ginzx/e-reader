@@ -19,7 +19,7 @@ public class ManagerServiceImpl implements ManagerService {
 	}
 
 	public List<Manager> selectAll(Integer offset, Integer length) throws Exception {
-		return manageDao.selectAll(offset, length);
+		return manageDao.selectAll((offset-1)*length, length);
 	}
 
 	public Manager selectbyaccount(String account) throws Exception {
@@ -28,7 +28,7 @@ public class ManagerServiceImpl implements ManagerService {
 
 	@Override
 	public List<Manager> selectmanager(Integer offset, Integer length, Manager manager) throws Exception {
-		return manageDao.selectmanager(offset, length, manager);
+		return manageDao.selectmanager((offset-1)*length, length, manager);
 	}
 
 	public boolean addmanager(Manager manager) throws Exception {

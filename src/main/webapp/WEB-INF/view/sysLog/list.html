@@ -1,0 +1,16 @@
+@if(sysLogs.~size<1){
+<!-- 无数据提示 -->
+	<tr class="text-c">
+		<td valign="top" colspan="8">没有找到匹配的记录</td>
+	</tr>
+@}else{
+	@for(sysLog in sysLogs){
+	<tr class="text-c">
+		<td>${sysLog.account!}</td>
+		<td>${sysLog.content!}</td>
+		<td>${sysLog.ip!}</td>
+		<td>${sysLog.remark!}</td>
+		<td>${sysLog.createTime!,dateFormat="yyyy-MM-dd HH:mm"}</td>
+	</tr>
+	@}
+@}

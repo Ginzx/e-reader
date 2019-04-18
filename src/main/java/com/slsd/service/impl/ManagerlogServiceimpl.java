@@ -19,9 +19,10 @@ public class ManagerlogServiceimpl implements ManagerlogService {
 
 	@Resource
 	private ManageLogDao manageLogDao;
+
 	@Override
-	public List<Managerlog> Select(Managerlog managerlog) {
-		return manageLogDao.Select(managerlog);
+	public List<Managerlog> Select(Integer offset, Integer length, Managerlog managerlog) {
+		return manageLogDao.Select((offset-1)*length, length, managerlog);
 	}
 
 	@Override
@@ -37,5 +38,10 @@ public class ManagerlogServiceimpl implements ManagerlogService {
 	@Override
 	public boolean delManagerlog(Managerlog managerlog) {
 		return manageLogDao.delManagerlog(managerlog);
+	}
+
+	@Override
+	public Integer CountManagelog(Managerlog managerlog) {
+		return manageLogDao.CountManagelog(managerlog);
 	}
 }

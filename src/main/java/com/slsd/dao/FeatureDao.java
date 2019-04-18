@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,11 +22,38 @@ public class FeatureDao {
 	@Resource
 	private JdbcTemplate jdbcTemplate;
 
-	public List<Feature> Selectall() {
-		String sql = "select * from feature order by f_id ";
+	public List<Feature> Selectall(Integer offset, Integer length, Feature feature) {
+		String sql = "select * from feature where 1=1 ";
+		List<Object> sqlParams = new ArrayList<Object>();
+		if (feature != null) {
+			if (feature.getfName() != "") {
+				sql += "and f_name like ? ";
+				sqlParams.add("%" + feature.getfName() + "%");
+			}
+		}
+		sql += "order by f_id asc limit ?,?";
+		sqlParams.add(offset);
+		sqlParams.add(length);
 		try {
 			RowMapper<Feature> rowMapper = BeanPropertyRowMapper.newInstance(Feature.class);
-			return jdbcTemplate.query(sql, rowMapper);
+			return jdbcTemplate.query(sql, sqlParams.toArray(new Object[sqlParams.size()]), rowMapper);
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
+	}
+
+	public Integer MenuCount(Feature feature) {
+		String sql = "select count(*) from feature where 1=1 ";
+		List<Object> sqlParams = new ArrayList<Object>();
+		if (feature != null) {
+			if (feature.getfName() != "") {
+				sql += " and f_name like ? ";
+				sqlParams.add("%" + feature.getfName() + "%");
+			}
+		}
+		try {
+			return this.jdbcTemplate.queryForObject(sql,
+					sqlParams.toArray(new Object[sqlParams.size()]), Integer.class);
 		} catch (IndexOutOfBoundsException e) {
 			return null;
 		}
@@ -112,9 +140,9 @@ public class FeatureDao {
 	}
 
 	public boolean EditFeature(Feature feature) {
-		String sql = "update feature set f_id=?,f_name=?,parent_id=?,parent_adress=? ";
+		String sql = "update feature set f_name=?,parent_id=?,parent_adress=? where f_id=? ";
 		try {
-			return jdbcTemplate.update(sql, feature.getfId(), feature.getfName(), feature.getParent_id(), feature.getParentAdress()) > 0 ? true : false;
+			return jdbcTemplate.update(sql,  feature.getfName(), feature.getParent_id(), feature.getParentAdress(),feature.getfId()) > 0 ? true : false;
 		} catch (Exception e) {
 			return false;
 		}
@@ -126,6 +154,16 @@ public class FeatureDao {
 			return jdbcTemplate.update(sql, fId) > 0 ? true : false;
 		} catch (Exception e) {
 			return false;
+		}
+	}
+
+	public Feature selfeaturebyid(Integer fId) {
+		String sql = "select * from feature where f_id=? ";
+		try {
+			RowMapper<Feature> rowMapper = BeanPropertyRowMapper.newInstance(Feature.class);
+			return jdbcTemplate.queryForObject(sql, rowMapper, fId);
+		} catch (Exception e) {
+			return null;
 		}
 	}
 
