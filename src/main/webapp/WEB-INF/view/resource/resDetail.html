@@ -1,0 +1,284 @@
+@var head = {
+<title>资源详情页</title>
+<link rel="stylesheet" href="../../">
+@};
+@var content = {
+<nav class="breadcrumb navbar navbar-fixed-top">
+    <i class="Hui-iconfont"></i> 图书详情
+    <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="firstdiv">
+    <div style="padding:0 0 30px 5px;position: fixed;right: 10px;top:50px;">
+
+        <div style="padding:0px 20px 5px 20px;">
+            <input type="button" class="btn btn-primary radius" id="edit" value="编辑"
+                   style="float:right;margin-left:10px;">
+            @if(canEdit==true){
+            <input type="button" class="btn btn-primary radius" id="cancel" value="取消"
+                   style="float:right;margin-left:10px;">
+            <input type="button" class="btn btn-primary radius" id="save" value="保存" style="float:right">
+            @}
+        </div>
+    </div>
+    @}
+    <div style="width:500px;">
+        <div class="pd-10" style="padding:10px 10px 5px 10px">
+            <div class="pd-10">
+                <strong>基本信息</strong>
+                <hr/>
+            </div>
+            <div class="pic-box coverUrl" id="picbox ">
+                <img id="img" width="140px" height="250px" src="${resInfo.coverUrl}">
+            </div>
+
+            <div class="row cl" style="padding:0px 0px 0px 20px;">
+                <label class="form-label col-3">标题：</label>
+                <div class="col-5 showText">
+                    ${resInfo.name!'-'}
+                </div>
+                <input type="text" class="hideText input-text"
+                       style="width:160px;height:24px;font-size:12px;margin-bottom:6px;" placeholder="请输入相关信息" id="name"
+                       value="${resInfo.name!''}">
+                <br>
+                <label class="form-label col-3">作者：</label>
+                <div class="col-5 showText">${resInfo.author!'-'}</div>
+                <input type="text" class="hideText input-text"
+                       style="width:160px;height:24px;font-size:11px;margin-bottom:6px;" placeholder="请输入相关信息"
+                       id="author" value="${resInfo.author!''}">
+                <br>
+                <label class="form-label col-3">分类：</label>
+                <div class="col-5 showText">
+                    ${category.name!''}
+                </div>
+                <select id="categoryId2" class="hideText input-text"
+                        style="width:160px;height:26px;font-size:12px;margin-bottom:6px;">
+            </div>
+        </div>
+        <div class="pd-10" style="padding:5px 10px 5px 10px">
+            <div style="padding:0 0 0 5px">
+                <strong>简介</strong>
+                @if(resInfo.longIntro!''!=''){
+                <input type="button" id="showMore" class="btn btn-primary radius"
+                       style="float:right;border:0;width:60px;height:20px;padding:0 0 3px 0;font-size:12px;" value="更多">
+                <input type="button" id="showLess" class="btn btn-primary radius"
+                       style="float:right;border:0;width:60px;height:20px;padding:0 0 3px 0;font-size:12px;" value="收起">
+                @}
+            </div>
+            <div style="padding:0 0 0 5px">
+                <hr/>
+            </div>
+            <div id="longIntro" class="showText" style="padding:0 0 0 5px">
+                ${resInfo.longIntro!'暂无简介'}
+            </div>
+            <div class="hideText" style="padding:0 0 0 5px">简介
+                <textarea id="talongIntro" rows="8" class="input-text" style="width: 100%;height:auto;">${resInfo.longIntro!''}</textarea>
+            </div>
+            <div style="padding:5px 0 0 5px">
+                <hr/>
+            </div>
+        </div>
+        <div class="pd-10" style="padding:5px 10px 5px 10px">
+            <div style="padding:0 0 0 5px">
+                <strong>章节目录信息</strong>
+                <input type="button" id="moreChapter" class="btn btn-primary radius"
+                       style="float:right;border:0;width:60px;height:25px;padding:0 0 3px 0;font-size:12px;margin-bottom:5px;"
+                       value="查看更多"
+                       onclick="layer_full_show_close_reload('章节目录列表','${request.contextPath}/chapter/search.html?resourceId=${resInfo.resourceId}&&isShowBtn=${isShowBtn}&&siteId=${siteId!'0'}','900','550')">
+            </div>
+            <div style="padding:3px 0 0 5px">
+                <hr/>
+            </div>
+            @if(chapterInfos.~size<1){
+            没有找到匹配的章节信息
+            @}else{
+            @for(chapterInfo in chapterInfos){
+            <div class="chapter">${chapterInfo.name}</div>
+            @}
+            @}
+            <div style="padding:0 0 0 5px">
+                <hr/>
+            </div>
+        </div>
+        <div class="pd-10" style="padding:5px 10px 5px 10px">
+            <div class="hideText">
+                <div class="row cl">
+                    <label class="form-label col-3">封面图片：</label>
+                    <div class="formControls col-5">
+                        <input type="hidden" value="${resInfo.coverUrl}" class="input-text"
+                               style="width:160px; height:24px;font-size:12px;margin-bottom:5px;"
+                               placeholder="选择图片自动生成图标路径" id="iconUrl" name="iconUrl">
+                        <div class="uploader-thum-container">
+                            <div id="filePicker" class="webuploader-container">
+                                <div class="webuploader-pick">选择图片</div>
+                                <div id="rt_rt_1agrit9p86a6102613rm2vu1gkr1"
+                                     style="position: absolute; top: 0px; left: 0px; width: 80px; height: 30px; overflow: hidden; bottom: auto; right: auto;">
+                                    <input type="file" name="myfiles" id="file" onchange="fileupload()"
+                                           unselectable="on" multiple="multiple" accept="image/*"
+                                           style="cursor:pointer;position:relative;left: 0;top: 0;width:350px;height:130%;opacity:0;font-size:100px">
+                                    <label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <small>*建议上传199*268px且支持（.jpg/.png）后缀的图片</small>
+                <div class="col-4"></div>
+            </div>
+        </div>
+    </div>
+
+
+    @}
+</div>
+</div>
+
+@};
+@var js = {
+
+<script type="text/javascript" src="${request.contextPath}/lib/My97DatePicker/WdatePicker.js"></script>
+<script src="${request.contextPath}/lib/select/jquery.searchableSelect.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/utf.js"></script>
+<script type="text/javascript" src="${request.contextPath}/js/jquery.qrcode.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var resId = $("#resId").val();
+        var type = $("#type").val();
+        $(".hideText").hide();
+        $("#longIntro").hide();
+        $(".firstdiv").show();
+        $("#showLess").hide();
+        $("#cancel").hide();
+        $("#save").hide();
+
+    });
+    $("#showMore").on('click', function () {
+        $("#longIntro").show();
+        $("#showLess").show();
+        $("#showMore").hide();
+    });
+
+    $("#showLess").on('click', function () {
+        $("#longIntro").hide();
+        $("#showLess").hide();
+        $("#showMore").show();
+    });
+
+    function localAjaxReload() {
+        window.location.replace(window.location.href);
+    }
+
+    $("#edit").on('click', function () {
+        $(".showText").hide();
+        $(".hideText").show();
+        $("#showMore").attr("disabled", true);
+        $("#showLess").attr("disabled", true);
+        $("#edit").hide();
+        $("#cancel").show();
+        $("#categoryId").change();
+        $("#save").show();
+    });
+    $("#cancel").on('click', function () {
+        window.location.replace(window.location.href);
+    });
+    $("#save").on('click', function () {
+        layer.confirm('修改之后资源需要重新审核，确认修改？', {
+            btn: ['确定', '取消']
+        }, function () {
+            layer.load(1, {shade: [0.3, '#393D49'], time: 30000})
+            var name = $("#name").val();//标题
+            var author = $("#author").val();//作者
+            var categoryId = $("#categoryId").val();//分类
+            var longIntro = $("#talongIntro").val();//长简介
+            var coverUrl = $("#iconUrl").val();
+            var channelIds = "";
+            $('input:checkbox[name=channelId]:checked').each(function (i) {
+                if (0 == i) {
+                    channelIds = $(this).val();
+                } else {
+                    channelIds += ("," + $(this).val());
+                }
+            });
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: "${request.contextPath}/resource/updateResource.html?",
+                data: {
+                    name: name,
+                    author: author,
+                    categoryId: categoryId,
+                    longIntro: longIntro,
+                    coverUrl: coverUrl,
+                    channelIds: channelIds,
+                },
+                error: function (e) {
+                    layer.msg('请求错误');
+                },
+                success: function (e) {
+                    if (e.code == 200) {
+                        window.location.replace(window.location.href);
+                    }
+                    else {
+                        layer.msg('操作失败：' + e.msg);
+                        layer.closeAll('loading');
+                        //window.location.replace(window.location.href);
+                    }
+                }
+            })
+        });
+    });
+</script>
+<script>
+    function fileupload() {
+        var filename = $("#file").val();
+        var ext = filename.substring(filename.lastIndexOf("."), filename.length);
+        if (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp") {
+
+        } else {
+            layer.msg("您上传的图片格式不正确，请重新选择！");
+            return;
+        }
+        $.ajaxFileUpload({
+            url: "../ep/uploadImg.html",
+            type: 'POST',
+            secureuri: false,
+            fileElementId: "file", // 上传文件的id、name属性名
+            dataType: 'text',
+            cache: false,
+            timeout: 300000,
+            error: function (data, status, e) {
+
+            },
+            success: function (result) {
+                //转
+                var objResult = eval('(' + result + ')');
+                var resultCode = objResult.resultCode;
+                var data = objResult.returnObject;
+                if (resultCode == 1000) {
+                    $("#img").attr("src", data.fileUrl.trim());
+                    document.getElementById("iconUrl").value = data.fileUrl;
+                } else {
+                    alert("上传失败")
+                }
+            }
+        });
+    };
+
+    //全屏展开子页面
+    function layer_full_show_close_reload(title, url) {
+        var index = layer.open({
+            type: 2,
+            title: title,
+            content: url,
+            closeBtn: 1, //显示关闭按钮
+            area: ['100%', '100%'],
+            end: function () {//关闭后刷新父页面
+                window.location.replace(window.location.href);
+            }
+        });
+        layer.full(index);
+    };
+</script>
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

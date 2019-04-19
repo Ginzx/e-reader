@@ -1,69 +1,78 @@
 @var head = {
-	<title>系统日志</title>
-	<link href="${request.contextPath}/lib/select/jquery.searchableSelect.css" rel="stylesheet" type="text/css">
-	<style type="text/css">
-   		.liform li b{min-width:80px;}
-   	</style>
+<title>系统日志</title>
+<link href="${request.contextPath}/lib/select/jquery.searchableSelect.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+    .liform li b {
+        min-width: 80px;
+    }
+</style>
 @};
 @var content = {
-	<nav class="breadcrumb">
-		<i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统日志
-		<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
-	</nav>
-	<div class="pd-20">
-		<div class="text-c">
-			<form action="${request.contextPath}/sysLog/search.html" method="post" id="searchForm" class="liform">
-				<li>
-					<b>操作者帐号：</b>
-					<input type="text" class="input-text" style="width:150px" maxlength="32" placeholder="输入帐号" id="" name="account" value="${account!''}">
-				</li>
-				<li>
-					<b>操作结果:</b>
-					<input type="text" class="input-text" style="width:150px" maxlength="32" placeholder="输入结果" id="" name="remark" value="${remark!''}">
-				</li>
-				<li>
-					<button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 查询</button>
-				</li>
-			</form>
-		</div>
-		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统日志
+    <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="pd-20">
+    <div class="text-c">
+        <form action="${request.contextPath}/sysLog/search.html" method="post" id="searchForm" class="liform">
+            <li>
+                <b>操作者帐号：</b>
+                <input type="text" class="input-text" style="width:150px" maxlength="32" placeholder="输入帐号" id=""
+                       name="account" value="${account!''}">
+            </li>
+            <li>
+                <b>操作结果:</b>
+                <input type="text" class="input-text" style="width:150px" maxlength="32" placeholder="输入结果" id=""
+                       name="remark" value="${remark!''}">
+            </li>
+            <li>
+                <button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+            </li>
+        </form>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
 			<span class="r">
 				每页显示：
-				<select id="set_pagesize" onchange="setPageSize(this.options[this.options.selectedIndex].value,'${request.contextPath}/','searchForm')">
+				<select id="set_pagesize"
+                        onchange="setPageSize(this.options[this.options.selectedIndex].value,'${request.contextPath}/','searchForm')">
 					<option value="10">10条</option>
 					<option value="25">25条</option>
 					<option value="50">50条</option>
 					<option value="100">100条</option>
 				</select>
 				&nbsp;&nbsp;总数：<strong>${total}</strong> 条
-			</span>  
-		</div>
-		<table id="myTable" class="table table-border table-bordered table-bg table-hover tablesorter">
-			<thead>
-				<tr class="text-c">
-					<th width="10%">操作者帐号</th>
-					<th width="24%">操作内容</th>
-					<th width="10%">操作ip</th>
-					<th width="10%">操作结果</th>
-					<th width="14%">操作时间</th>
-				</tr>
-			</thead>
-			<tbody id="dataContent">
-				
-			</tbody>
-		</table>
-		<div id="pager" style="padding-top:5px;float:right"></div>
-	</div>
-	<!-- <footer class="footer"></footer> -->
+			</span>
+    </div>
+    <table id="myTable" class="table table-border table-bordered table-bg table-hover tablesorter">
+        <thead>
+        <tr class="text-c">
+            <th width="10%">操作者帐号</th>
+            <th width="24%">操作内容</th>
+            <th width="10%">操作ip</th>
+            <th width="10%">操作结果</th>
+            <th width="14%">操作时间</th>
+        </tr>
+        </thead>
+        <tbody id="dataContent">
+
+        </tbody>
+    </table>
+    <div id="pager" style="padding-top:5px;float:right"></div>
+</div>
+<!-- <footer class="footer"></footer> -->
 @};
 @var js = {
-	<script src="${request.contextPath}/lib/select/jquery.searchableSelect.js"></script>
-	<script>
-		$(document).ready(function () {
-			$("#siteId").searchableSelect();
-			pager('${request.contextPath}/sysLog/list.html', {account:"${account!''}",remark:"${remark!''}"}, ${total}, page_size,1);
-		});
+<script src="${request.contextPath}/lib/select/jquery.searchableSelect.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#siteId").searchableSelect();
+        pager('${request.contextPath}/sysLog/list.html', {
+            account: "${account!''}",
+            remark: "${remark!''}"
+        }, ${total}, page_size, 1);
+    });
 
-	</script>
+</script>
 @};
 @include("/layout/layout.html",{head:head,content:content,js:js}){}

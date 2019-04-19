@@ -21,48 +21,38 @@ public class ClassificationDao {
 	@Resource
 	private JdbcTemplate jdbcTemplate;
 
-	public List<ClassificationService> SelectFather() {
-		String sql = "select * from Classification where parent_id=0";
+	public List<Classification> Select() {
+		String sql = "select * from Classification  ";
 		try {
-			RowMapper<ClassificationService> rowMapper = BeanPropertyRowMapper.newInstance(ClassificationService.class);
+			RowMapper<Classification> rowMapper = BeanPropertyRowMapper.newInstance(Classification.class);
 			return jdbcTemplate.query(sql, rowMapper);
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
-	public List<ClassificationService> SelectSon(Integer parent_id) {
-		String sql = "select * from Classification where parent_id=?";
-		try {
-			RowMapper<ClassificationService> rowMapper = BeanPropertyRowMapper.newInstance(ClassificationService.class);
-			return jdbcTemplate.query(sql, rowMapper, parent_id);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
 	public boolean AddClass(Classification classification) {
-		String sql = "insert into classification (classification_name,parent_id) values(?,?)";
+		String sql = "insert into classification (classification_name) values(?)";
 		try {
-			return jdbcTemplate.update(sql, classification.getClassificationName(), classification.getParentId()) > 0 ? true : false;
+			return jdbcTemplate.update(sql, classification.getClassificationName()) > 0 ? true : false;
 		} catch (Exception e) {
 			return false;
 		}
 	}
 
-	public boolean editClass(Classification classification){
-		String sql="update classification set classification_name=?,parent_id=? ";
+	public boolean editClass(Classification classification) {
+		String sql = "update classification set classification_name=? where classification_id=?";
 		try {
-			return jdbcTemplate.update(sql, classification.getClassificationName(), classification.getParentId()) > 0 ? true : false;
+			return jdbcTemplate.update(sql, classification.getClassificationName(), classification.getClassificationId()) > 0 ? true : false;
 		} catch (Exception e) {
 			return false;
 		}
 	}
 
-	public boolean delClass(Integer id){
-		String sql="delete from classification where classification_id=?";
+	public boolean delClass(Integer id) {
+		String sql = "delete from classification where classification_id=?";
 		try {
-			return jdbcTemplate.update(sql,id) > 0 ? true : false;
+			return jdbcTemplate.update(sql, id) > 0 ? true : false;
 		} catch (Exception e) {
 			return false;
 		}

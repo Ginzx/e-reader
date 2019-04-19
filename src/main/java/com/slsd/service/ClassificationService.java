@@ -6,8 +6,7 @@ import java.util.List;
 
 public interface ClassificationService {
 
-	public List<ClassificationService> SelectFather();
-	public List<ClassificationService> SelectSon(Integer parent_id);
+	public List<Classification> Select();
 	public boolean AddClass(Classification classification);
 	public boolean editClass(Classification classification);
 	public boolean delClass(Integer id);

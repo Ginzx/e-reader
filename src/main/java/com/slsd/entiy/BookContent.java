@@ -7,7 +7,6 @@ package com.slsd.entiy;
  **/
 public class BookContent {
 	private long id;
-	private String name; //书名
 	private String chapter;//章节名
 	private String content;//内容
 	private long number; //排序号
@@ -27,14 +26,6 @@ public class BookContent {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getChapter() {
@@ -65,7 +56,6 @@ public class BookContent {
 	public String toString() {
 		return "Content{" +
 				"id=" + id +
-				", name='" + name + '\'' +
 				", chapter='" + chapter + '\'' +
 				", content='" + content + '\'' +
 				", number=" + number +

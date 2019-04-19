@@ -13,7 +13,7 @@ public class Book implements Serializable {
 	private static final long serialVersionUID = 7380107790072404223L;
 	private Integer bookid;//书籍编号
 	private String bookName;//书籍名称
-	private String Status;//书籍状态
+	private Integer Status;//书籍状态
 	private String author;//书籍作者
 	private String classification;
 	private String bookurl;
@@ -77,11 +77,11 @@ public class Book implements Serializable {
 		this.bookName = bookName;
 	}
 
-	public String getStatus() {
+	public Integer getStatus() {
 		return Status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Integer status) {
 		Status = status;
 	}
 

@@ -18,16 +18,11 @@ public class ClassificationServiceimpl implements ClassificationService {
 
 	@Resource
 	private ClassificationDao classificationDao;
-	@Override
-	public List<ClassificationService> SelectFather() {
-		return classificationDao.SelectFather();
-	}
 
 	@Override
-	public List<ClassificationService> SelectSon(Integer parent_id) {
-		return classificationDao.SelectSon(parent_id);
+	public List<Classification> Select() {
+		return classificationDao.Select();
 	}
-
 	@Override
 	public boolean AddClass(Classification classification) {
 		return classificationDao.AddClass(classification);

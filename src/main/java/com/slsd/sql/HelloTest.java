@@ -35,14 +35,12 @@ public class HelloTest {
 				BookContent content = new BookContent();
 				while ((lineTxt = bufferedReader.readLine()) != null) {
 					content = new BookContent();
-					//小说名称
-					content.setName("test");
 					count++;
 					// 正则表达式
 					Pattern p = Pattern.compile("(^\\s*第)(.{1,9})[章节卷集部篇回](\\s{1})(.*)($\\s*)");
 					Matcher matcher = p.matcher(lineTxt);
 					Matcher matcher1 = p.matcher(lineTxt);
-					newStr = newStr + "<p>" + lineTxt + "</p>";
+					newStr = newStr + "<p  class=\"content-text\">" + lineTxt + "</p>";
 
 					while (matcher.find()) {
 						content.setChapter(newChapterName);

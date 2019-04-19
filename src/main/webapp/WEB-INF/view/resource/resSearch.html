@@ -1,0 +1,156 @@
+@var head = {
+<title>资源设置</title>
+<link href="${request.contextPath}/lib/select/jquery.searchableSelect.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+    .liform li b {
+        min-width: 80px;
+    }
+</style>
+@};
+@var content = {
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>资源管理
+
+    <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+<div class="container" style="width: 124%">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="row text-c" style="margin-bottom:20px;">
+                <form id="searchForm" action="${request.contextPath}/resource/resSearch.html" method="post"
+                      class="liform">
+                    <li>
+                        <b>分类标签：</b>
+                        <span class="select-box pd-5" style="width:120px">
+								<select id="category" name="category" class="select">
+								<option value="" selected>全部</option>
+									 @for(category in classifications!){
+										  <option value="${category.classificationName}"
+                                                  @if(category.classificationName=="${classification}!''"){
+                                                  selected
+                                                  @}
+                                          >${category.classificationName}</option>
+									 @}
+								 </select>
+								</span>
+                    </li>
+                    <li>
+                        <b>书本名称：</b>
+                        <input type="text" class="input-text pd-5" style="width:120px" placeholder="输入书本名称"
+                               id="name" name="name" value="${name!''}">
+                    </li>
+                    <li>
+                        <b>作者：</b>
+                        <input type="text" class="input-text pd-5" style="width:120px" placeholder="输入作者"
+                               id="author" name="author" value="${author!''}">
+                    </li>
+                    <b>审核状态：</b>
+                    <span class="select-box pd-5" style="width:120px">
+									<select name="Status" class=" select">
+										<option value="">全部</option>
+										<option value="0"
+                                                @if(Status!'' == 0){
+												selected
+											@}
+										>未发布</option>
+                                        <option value="1"
+                                                @if(Status!'' == 1){
+												selected
+											@}
+										>上架</option>
+                                        <option value="2"
+                                                @if(Status!'' == 2){
+							 					selected
+											@}
+						    			>下架</option>
+									</select>
+								</span>
+                    </li>
+
+                    <button type="submit" id="resSubmit" class="btn btn-success pd-15 "><i
+                            class="Hui-iconfont">&#xe665;</i>
+                        查询
+                    </button>
+                </form>
+            </div>
+            <div class="row ml-30" style="overflow:hidden;background:#fff;">
+                <span class="r  mt-15" style="margin:5px;width:100%;text-align:right;">
+					每页显示：
+					<select id="set_pagesize"
+                            onchange="setPageSize(this.options[this.options.selectedIndex].value,'${request.contextPath}/','searchForm')">
+						<option value="10">10条</option>
+						<option value="25">25条</option>
+						<option value="50">50条</option>
+						<option value="100">100条</option>
+					</select>
+					&nbsp;&nbsp;总数：<strong>${total}</strong> 条
+				</span>
+            </div>
+            <table class="table table-responsive table-border table-bordered table-bg table-hover tablesorter pl-10">
+                <thead>
+                <tr class="text-c">
+                    <th width="5%"><input type="checkbox" name="" value=""></th>
+                    <th width="15%">书本名称</th>
+                    <th width="10%">作者</th>
+                    <th width="8%">分类标签</th>
+                    <th width="6%">审核状态</th>
+                    <th width="10%">发布时间</th>
+                    <th width="10%">修改时间</th>
+                    <th style="width: 200px;">操作</th>
+                </tr>
+                </thead>
+                <tbody id="dataContent">
+
+                </tbody>
+            </table>
+            <div id="pager" style="padding-top:5px;float:right"></div>
+        </div>
+    </div>
+</div>
+<!-- <footer class="footer"></footer> -->
+@};
+@var js = {
+<script src="${request.contextPath}/lib/select/jquery.searchableSelect.js"></script>
+<script>
+    $(document).ready(function () {
+        //刷新list页面
+        function freshPage() {
+            $("#pageNo").val($("span.laypage_curr").html());
+            $("#resSubmit").click();
+        }
+
+        //初始化表单
+        pager('${request.contextPath}/resource/resList.html', {
+            name: "${name!''}",
+            author: "${author!''}",
+            Status: "${Status!''}",
+            categoryId: "${categoryId!''}",
+            createDate: "${createDateDate!''}",
+            modifyTime: "${modifyTime!''}"
+        }, ${total}, page_size, ${pageNo!0});
+        //排序初始化，第一列不进行排序(索引从0开始)
+        $.tablesorter.defaults.headers = {
+            0: {sorter: false}, 1: {sorter: false},
+            2: {sorter: false}, 3: {sorter: false},
+            4: {sorter: false}, 5: {sorter: false},
+            6: {sorter: false}, 7: {sorter: false},
+        };
+    });
+
+    function localAjaxReload() {
+        pager('${request.contextPath}/resource/resList.html', {
+            name: "${name!''}",
+            author: "${author!''}",
+            Status: "${Status!''}",
+            categoryId: "${categoryId!''}",
+            createDate: "${createDateDate!''}",
+            modifyTime: "${modifyTime!''}",
+        }, ${total}, page_size, $(".laypage_curr").text());
+    }
+
+</script>
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}
