@@ -181,7 +181,7 @@ public class MenuController extends BaseController {
 			//操作日志
 			managerLog.setmId(Loginmanager.getmId());
 			managerLog.setCreateTime(new Date());
-			managerLog.setContent("删除菜单");
+			managerLog.setContent("删除书籍");
 			managerLog.setAccount(Loginmanager.getAccount());
 			managerLog.setIp(ContextUtils.getIpAddr(request));
 		} catch (Exception e) {

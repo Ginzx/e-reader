@@ -10,18 +10,14 @@
 </nav>
 <div class="firstdiv">
     <div style="padding:0 0 30px 5px;position: fixed;right: 10px;top:50px;">
-
         <div style="padding:0px 20px 5px 20px;">
             <input type="button" class="btn btn-primary radius" id="edit" value="编辑"
                    style="float:right;margin-left:10px;">
-            @if(canEdit==true){
             <input type="button" class="btn btn-primary radius" id="cancel" value="取消"
                    style="float:right;margin-left:10px;">
             <input type="button" class="btn btn-primary radius" id="save" value="保存" style="float:right">
-            @}
         </div>
     </div>
-    @}
     <div style="width:500px;">
         <div class="pd-10" style="padding:10px 10px 5px 10px">
             <div class="pd-10">
@@ -29,17 +25,17 @@
                 <hr/>
             </div>
             <div class="pic-box coverUrl" id="picbox ">
-                <img id="img" width="140px" height="250px" src="${resInfo.coverUrl}">
+                <img id="img" width="140px" height="250px" src="${request.contextPath}/${resInfo.bookurl}">
             </div>
 
             <div class="row cl" style="padding:0px 0px 0px 20px;">
                 <label class="form-label col-3">标题：</label>
                 <div class="col-5 showText">
-                    ${resInfo.name!'-'}
+                    ${resInfo.bookName!'-'}
                 </div>
                 <input type="text" class="hideText input-text"
                        style="width:160px;height:24px;font-size:12px;margin-bottom:6px;" placeholder="请输入相关信息" id="name"
-                       value="${resInfo.name!''}">
+                       value="${resInfo.bookName!''}">
                 <br>
                 <label class="form-label col-3">作者：</label>
                 <div class="col-5 showText">${resInfo.author!'-'}</div>
@@ -49,16 +45,25 @@
                 <br>
                 <label class="form-label col-3">分类：</label>
                 <div class="col-5 showText">
-                    ${category.name!''}
+                    ${resInfo.classification!''}
                 </div>
                 <select id="categoryId2" class="hideText input-text"
                         style="width:160px;height:26px;font-size:12px;margin-bottom:6px;">
+                    @for(category in classifications!){
+                    <option value="${category.classificationName}"
+                            @if(category.classificationName=="${resInfo.classification}!''"){
+                            selected
+                            @}
+                    >${category.classificationName}
+                    </option>
+                    @}
+                </select>
             </div>
         </div>
         <div class="pd-10" style="padding:5px 10px 5px 10px">
             <div style="padding:0 0 0 5px">
                 <strong>简介</strong>
-                @if(resInfo.longIntro!''!=''){
+                @if(resInfo. content!''!=''){
                 <input type="button" id="showMore" class="btn btn-primary radius"
                        style="float:right;border:0;width:60px;height:20px;padding:0 0 3px 0;font-size:12px;" value="更多">
                 <input type="button" id="showLess" class="btn btn-primary radius"
@@ -69,10 +74,10 @@
                 <hr/>
             </div>
             <div id="longIntro" class="showText" style="padding:0 0 0 5px">
-                ${resInfo.longIntro!'暂无简介'}
+                ${resInfo. content!'暂无简介'}
             </div>
             <div class="hideText" style="padding:0 0 0 5px">简介
-                <textarea id="talongIntro" rows="8" class="input-text" style="width: 100%;height:auto;">${resInfo.longIntro!''}</textarea>
+                <textarea id="talongIntro" rows="8" class="input-text" style="width: 100%;height:auto;">${resInfo. content!''}</textarea>
             </div>
             <div style="padding:5px 0 0 5px">
                 <hr/>
@@ -84,7 +89,7 @@
                 <input type="button" id="moreChapter" class="btn btn-primary radius"
                        style="float:right;border:0;width:60px;height:25px;padding:0 0 3px 0;font-size:12px;margin-bottom:5px;"
                        value="查看更多"
-                       onclick="layer_full_show_close_reload('章节目录列表','${request.contextPath}/chapter/search.html?resourceId=${resInfo.resourceId}&&isShowBtn=${isShowBtn}&&siteId=${siteId!'0'}','900','550')">
+                       onclick="layer_full_show_close_reload('章节目录列表','${request.contextPath}/chapter/search.html?,'900','550')">
             </div>
             <div style="padding:3px 0 0 5px">
                 <hr/>
@@ -93,7 +98,7 @@
             没有找到匹配的章节信息
             @}else{
             @for(chapterInfo in chapterInfos){
-            <div class="chapter">${chapterInfo.name}</div>
+            <div class="chapter">${chapterInfo.chapter}</div>
             @}
             @}
             <div style="padding:0 0 0 5px">
@@ -105,7 +110,7 @@
                 <div class="row cl">
                     <label class="form-label col-3">封面图片：</label>
                     <div class="formControls col-5">
-                        <input type="hidden" value="${resInfo.coverUrl}" class="input-text"
+                        <input type="hidden" value="${resInfo. bookurl}" class="input-text"
                                style="width:160px; height:24px;font-size:12px;margin-bottom:5px;"
                                placeholder="选择图片自动生成图标路径" id="iconUrl" name="iconUrl">
                         <div class="uploader-thum-container">
@@ -127,20 +132,13 @@
             </div>
         </div>
     </div>
-
-
-    @}
 </div>
-</div>
-
 @};
 @var js = {
-
 <script type="text/javascript" src="${request.contextPath}/lib/My97DatePicker/WdatePicker.js"></script>
 <script src="${request.contextPath}/lib/select/jquery.searchableSelect.js"></script>
 <script type="text/javascript" src="${request.contextPath}/js/utf.js"></script>
 <script type="text/javascript" src="${request.contextPath}/js/jquery.qrcode.js"></script>
-
 <script>
     $(document).ready(function () {
         var resId = $("#resId").val();
@@ -218,8 +216,7 @@
                 success: function (e) {
                     if (e.code == 200) {
                         window.location.replace(window.location.href);
-                    }
-                    else {
+                    } else {
                         layer.msg('操作失败：' + e.msg);
                         layer.closeAll('loading');
                         //window.location.replace(window.location.href);
@@ -234,13 +231,12 @@
         var filename = $("#file").val();
         var ext = filename.substring(filename.lastIndexOf("."), filename.length);
         if (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp") {
-
         } else {
             layer.msg("您上传的图片格式不正确，请重新选择！");
             return;
         }
         $.ajaxFileUpload({
-            url: "../ep/uploadImg.html",
+            url: "${request.contextPath}/resource/uploadImg.html",
             type: 'POST',
             secureuri: false,
             fileElementId: "file", // 上传文件的id、name属性名
@@ -250,16 +246,12 @@
             error: function (data, status, e) {
 
             },
-            success: function (result) {
-                //转
-                var objResult = eval('(' + result + ')');
-                var resultCode = objResult.resultCode;
-                var data = objResult.returnObject;
-                if (resultCode == 1000) {
-                    $("#img").attr("src", data.fileUrl.trim());
-                    document.getElementById("iconUrl").value = data.fileUrl;
+            success: function (ret) {
+                if (ret.code == 0) {
+                    $("#img").attr("src", ret.result.url);
+                    document.getElementById("iconUrl").value = ret.result.url;
                 } else {
-                    alert("上传失败")
+                    alertError(ret.message);
                 }
             }
         });

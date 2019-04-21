@@ -19,111 +19,122 @@ import java.util.List;
 @Repository
 public class BookDao {
 
-	@Resource
-	JdbcTemplate jdbcTemplate;
+    @Resource
+    JdbcTemplate jdbcTemplate;
 
-	public List<Book> selectBook(Integer offset, Integer length, Book book) {
-		String sql = "select * from Book where 1=1 ";
-		List<Object> sqlParams = new ArrayList<Object>();
-		if (book != null) {
-			if (book.getBookName() != "") {
-				sql += " and Bookname like ? ";
-				sqlParams.add("%" + book.getBookName() + "%");
-			}
-			if (!StringUtil.isEmpty(book.getClassification())) {
-				sql += " and classification like ? ";
-				sqlParams.add("%" + book.getClassification() + "%");
-			}
-			if (book.getAuthor() != "") {
-				sql += " and author like ? ";
-				sqlParams.add("%" + book.getAuthor() + "%");
-			}
-			if (book.getBookName() != "") {
-				sql += " and status = ? ";
-				sqlParams.add("%" + book.getStatus() + "%");
-			}
-			sql += " order by createtime asc limit ?,?";
-			sqlParams.add(offset);
-			sqlParams.add(length);
-		}
-		try {
-			RowMapper<Book> rowMapper = BeanPropertyRowMapper.newInstance(Book.class);
-			return jdbcTemplate.query(sql, sqlParams.toArray(new Object[sqlParams.size()]), rowMapper);
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-	}
+    public List<Book> selectBook(Integer offset, Integer length, Book book) {
+        String sql = "select * from Book where 1=1 ";
+        List<Object> sqlParams = new ArrayList<Object>();
+        if (book != null) {
+            if (book.getBookName() != "") {
+                sql += " and Bookname like ? ";
+                sqlParams.add("%" + book.getBookName() + "%");
+            }
+            if (!StringUtil.isEmpty(book.getClassification())) {
+                sql += " and classification like ? ";
+                sqlParams.add("%" + book.getClassification() + "%");
+            }
+            if (book.getAuthor() != "") {
+                sql += " and author like ? ";
+                sqlParams.add("%" + book.getAuthor() + "%");
+            }
+            if (book.getBookName() != "") {
+                sql += " and status = ? ";
+                sqlParams.add("%" + book.getStatus() + "%");
+            }
+            sql += " order by bookid asc limit ?,?";
+            sqlParams.add(offset);
+            sqlParams.add(length);
+        }
+        try {
+            RowMapper<Book> rowMapper = BeanPropertyRowMapper.newInstance(Book.class);
+            return jdbcTemplate.query(sql, sqlParams.toArray(new Object[sqlParams.size()]), rowMapper);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
 
-	public Integer countbook(Book book) {
-		String sql = "select count(*) from Book where 1=1 ";
-		List<Object> sqlParams = new ArrayList<Object>();
-		if (book != null) {
-			if (book.getBookName() != "") {
-				sql += " and book_name like ? ";
-				sqlParams.add("%" + book.getBookName() + "%");
-			}
-			if (book.getClassification() != "") {
-				sql += " and classification like ? ";
-				sqlParams.add("%" + book.getClassification() + "%");
-			}
-			if (book.getAuthor() != "") {
-				sql += " and author like ? ";
-				sqlParams.add("%" + book.getAuthor() + "%");
-			}
-			if (book.getBookName() != "") {
-				sql += " and status = ? ";
-				sqlParams.add(book.getStatus());
-			}
-			if (book.getBookid() != null) {
-				sql += " and bookid = ? ";
-				sqlParams.add(book.getBookid());
-			}
-		}
-		try {
-			return this.jdbcTemplate.queryForObject(sql,
-					sqlParams.toArray(new Object[sqlParams.size()]), Integer.class);
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-	}
+    public Integer countbook(Book book) {
+        String sql = "select count(*) from Book where 1=1 ";
+        List<Object> sqlParams = new ArrayList<Object>();
+        if (book != null) {
+            if (book.getBookName() != "") {
+                sql += " and book_name like ? ";
+                sqlParams.add("%" + book.getBookName() + "%");
+            }
+            if (book.getClassification() != "") {
+                sql += " and classification like ? ";
+                sqlParams.add("%" + book.getClassification() + "%");
+            }
+            if (book.getAuthor() != "") {
+                sql += " and author like ? ";
+                sqlParams.add("%" + book.getAuthor() + "%");
+            }
+            if (book.getBookName() != "") {
+                sql += " and status = ? ";
+                sqlParams.add(book.getStatus());
+            }
+            if (book.getBookid() != null) {
+                sql += " and bookid = ? ";
+                sqlParams.add(book.getBookid());
+            }
+        }
+        try {
+            return this.jdbcTemplate.queryForObject(sql,
+                    sqlParams.toArray(new Object[sqlParams.size()]), Integer.class);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
 
-	public boolean AddBook(Book book) {
-		String sql = "insert into book (book_name,Status,author,classification,content,createtime,bookurl)values (?,?,?,?,?,?,?)";
-		try {
-			return jdbcTemplate.update(sql, book.getBookName(), book.getStatus(), book.getAuthor(), book.getClassification(),
-					book.getContent(), book.getCreateTime(), book.getBookurl()) > 0 ? true : false;
-		} catch (Exception e) {
-			return false;
-		}
-	}
+    public boolean AddBook(Book book) {
+        String sql = "insert into book (book_name,Status,author,classification,content,createtime,bookurl)values (?,?,?,?,?,?,?)";
+        try {
+            return jdbcTemplate.update(sql, book.getBookName(), book.getStatus(), book.getAuthor(), book.getClassification(),
+                    book.getContent(), book.getCreateTime(), book.getBookurl()) > 0 ? true : false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-	public boolean updateBook(Book book) {
-		String sql = "update book set book_name=?,Status=?,author=?,classification=?,content=?,modifetime=?,bookurl=? where Bookid=?";
-		try {
-			return jdbcTemplate.update(sql, book.getBookName(), book.getStatus(), book.getAuthor(), book.getClassification(),
-					book.getContent(), book.getModifyTime(), book.getBookurl(), book.getBookid()) > 0 ? true : false;
-		} catch (Exception e) {
-			return false;
-		}
-	}
+    public boolean updateBook(Book book) {
+        String sql = "update book set book_name=?,Status=?,author=?,classification=?,content=?,modifetime=?,bookurl=? where Bookid=?";
+        try {
+            return jdbcTemplate.update(sql, book.getBookName(), book.getStatus(), book.getAuthor(), book.getClassification(),
+                    book.getContent(), book.getModifyTime(), book.getBookurl(), book.getBookid()) > 0 ? true : false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-	public boolean del(Integer bookid) {
-		String sql = "delete from book where bookid=? ";
-		try {
-			return jdbcTemplate.update(sql, bookid) > 0 ? true : false;
-		} catch (Exception e) {
-			return false;
-		}
-	}
+    public boolean del(Integer bookid) {
+        String sql = "delete from book where bookid=? ";
+        try {
+            return jdbcTemplate.update(sql, bookid) > 0 ? true : false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-	public boolean updateBook(Integer status, Integer bookid) {
-		String sql = "update book set status=? where booid=?";
-		try {
-			return jdbcTemplate.update(sql, status, bookid) > 0 ? true : false;
-		} catch (Exception e) {
-			return false;
-		}
-	}
+    public boolean updateBook(Integer status, Integer bookid) {
+        String sql = "update book set status=? where booid=?";
+        try {
+            return jdbcTemplate.update(sql, status, bookid) > 0 ? true : false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Book selectBookbyId(Integer bookid) {
+        String sql = "select * from Book where bookid=?";
+        try {
+            RowMapper<Book> rowMapper = BeanPropertyRowMapper.newInstance(Book.class);
+            return jdbcTemplate.queryForObject(sql,rowMapper,bookid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
 }

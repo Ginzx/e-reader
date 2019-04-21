@@ -23,4 +23,6 @@ public interface BookService {
 
 	public void updateBook(Integer status,String bookids) throws Exception ;
 
+	public Book selectBookbyId(Integer bookid);
+
 }

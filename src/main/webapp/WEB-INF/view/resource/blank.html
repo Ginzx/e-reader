@@ -1,0 +1,18 @@
+@var head = {
+	<title>资源审核</title>
+@};
+@var content = {
+	<div class="text-c" style="padding:30px 0 20px 0">
+			<p>获取资源出错了！</p>
+		</div>
+@};
+@var js = {
+	<script type="text/javascript" src="${request.contextPath}/lib/Validform/5.3.2/Validform.min.js"></script>
+	<script type="text/javascript" src="${request.contextPath}/lib/jquery.form.js"></script>
+	<script>
+		$(document).ready(function () {
+			validSubmitFormAndRefreshParent('createForm');
+		});
+	</script>
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

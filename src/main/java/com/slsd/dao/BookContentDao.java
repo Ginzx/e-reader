@@ -21,7 +21,7 @@ public class BookContentDao {
 	JdbcTemplate jdbcTemplate;
 
 	public List<BookContent> Selecttitle(Integer offset, Integer length, Integer id) {
-		String sql = "select id,number,chapter from Bookcontent where bid = ? limit ?,? ";
+		String sql = "select id,Bookcontent.number,chapter from Bookcontent where bid = ? order by Bookcontent.number asc limit ?,?";
 		try {
 			RowMapper<BookContent> rowMapper = BeanPropertyRowMapper.newInstance(BookContent.class);
 			return jdbcTemplate.query(sql, rowMapper, id, offset, length);

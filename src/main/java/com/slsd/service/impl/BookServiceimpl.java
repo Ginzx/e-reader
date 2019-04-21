@@ -55,4 +55,9 @@ public class BookServiceimpl implements BookService {
 			}
 		}
 	}
+
+	@Override
+	public Book selectBookbyId(Integer bookid) {
+		return bookDao.selectBookbyId(bookid);
+	}
 }
