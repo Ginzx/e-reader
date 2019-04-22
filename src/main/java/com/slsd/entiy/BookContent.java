@@ -6,25 +6,17 @@ package com.slsd.entiy;
  * @author: Mr.Wang
  **/
 public class BookContent {
-	private long id;
+	private Integer id;
 	private String chapter;//章节名
 	private String content;//内容
-	private long number; //排序号
-	private long bid; //书本id
+	private Integer number; //排序号
+	private Integer bid; //书本id
 
-	public long getBid() {
-		return bid;
-	}
-
-	public void setBid(long bid) {
-		this.bid = bid;
-	}
-
-	public long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -44,21 +36,30 @@ public class BookContent {
 		this.content = content;
 	}
 
-	public long getNumber() {
+	public Integer getNumber() {
 		return number;
 	}
 
-	public void setNumber(long number) {
+	public void setNumber(Integer number) {
 		this.number = number;
+	}
+
+	public Integer getBid() {
+		return bid;
+	}
+
+	public void setBid(Integer bid) {
+		this.bid = bid;
 	}
 
 	@Override
 	public String toString() {
-		return "Content{" +
+		return "BookContent{" +
 				"id=" + id +
 				", chapter='" + chapter + '\'' +
 				", content='" + content + '\'' +
 				", number=" + number +
+				", bid=" + bid +
 				'}';
 	}
 }

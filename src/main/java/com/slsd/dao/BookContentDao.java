@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,9 +33,11 @@ public class BookContentDao {
 
 	public Integer CountBookContent(Integer id) {
 		String sql = "select count(*) from bookcontent where bid=?";
+		List<Object> sqlParams = new ArrayList<Object>();
+		sqlParams.add(id);
 		try {
-			RowMapper<Integer> rowMapper = BeanPropertyRowMapper.newInstance(Integer.class);
-			return this.jdbcTemplate.queryForObject(sql, rowMapper, id);
+			return this.jdbcTemplate.queryForObject(sql,
+					sqlParams.toArray(new Object[sqlParams.size()]), Integer.class);
 		} catch (IndexOutOfBoundsException e) {
 			return null;
 		}
@@ -53,14 +56,14 @@ public class BookContentDao {
 	public boolean addBookcontent(BookContent bookContent, Integer bid) {
 		String sql = "insert into bookcontent (bid,chapter,content,number)values (?,?,?,?)";
 		try {
-			return jdbcTemplate.update(sql, bookContent.getBid(), bookContent.getChapter(),
+			return jdbcTemplate.update(sql, bid, bookContent.getChapter(),
 					bookContent.getContent(), bookContent.getNumber()) > 0 ? true : false;
 		} catch (Exception e) {
 			return false;
 		}
 	}
 
-	public boolean delBookContent(Integer bid) {
+	public boolean delBookContentall(Integer bid) {
 		String sql = "delete from bookcontent where bid=?";
 		try {
 			return jdbcTemplate.update(sql, bid) > 0 ? true : false;
@@ -69,8 +72,17 @@ public class BookContentDao {
 		}
 	}
 
+	public boolean delBookContent(Integer id) {
+		String sql = "delete from bookcontent where id=?";
+		try {
+			return jdbcTemplate.update(sql, id) > 0 ? true : false;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 	public boolean updateBookContent(BookContent bookContent) {
-		String sql = "update bookcontent set chapter=?,content=?,number=? where bid=?";
+		String sql = "update bookcontent set chapter=?,content=?,number=? where id=?";
 		try {
 			return jdbcTemplate.update(sql, bookContent.getChapter(),
 					bookContent.getContent(), bookContent.getNumber(), bookContent.getBid()) > 0 ? true : false;

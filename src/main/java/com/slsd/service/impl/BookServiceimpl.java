@@ -45,15 +45,8 @@ public class BookServiceimpl implements BookService {
 	}
 
 	@Override
-	public void updateBook(Integer status, String bookids) throws Exception {
-		String[] ids = bookids.split(",");
-		for (int i = 0; i < ids.length; i++) {
-			if (!bookDao.updateBook(status, Integer.valueOf(ids[i]))) {
-				throw new Exception("修改错误");
-			} else {
-				bookDao.updateBook(status, Integer.valueOf(ids[i]));
-			}
-		}
+	public void updateBook(Integer status, Integer bookids) throws Exception {
+		bookDao.updateBook(status,bookids);
 	}
 
 	@Override

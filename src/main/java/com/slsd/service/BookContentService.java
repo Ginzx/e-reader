@@ -14,7 +14,9 @@ public interface BookContentService {
 
 	public void addBookcontent(List<BookContent> bookContents, Integer bid);
 
-	public boolean delBookContent(Integer bid);
+	public boolean delBookContent(Integer id);
+
+	public boolean delBookContentall(Integer bid);
 
 	public boolean updateBookContent(BookContent bookContent);
 }

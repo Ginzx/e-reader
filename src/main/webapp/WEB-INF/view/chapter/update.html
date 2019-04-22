@@ -1,0 +1,128 @@
+@var head = {
+	<title>章节内容页</title>
+@};
+@var content = {
+<div id="firstdiv" style="display:none">
+<div style="position: fixed;right: 10px;top:10px;padding:5px 20px 5px 20px;z-index:1000">
+				<input type="button" class="btn btn-primary radius" id="save" value="保存">
+				<input type="button" class="btn btn-primary radius" id="edit" value="编辑" >
+				<input type="button" class="btn btn-primary radius" id="cancel" value="取消">
+	</div>
+	<div class="pd-10" style="padding:10px 10px 5px 10px">
+		<div class="row cl" style="padding:0px 0px 0px 20px;">
+				<label class="form-label col-3">标题：</label>
+				<div class="col-5 showText"><strong>${chapterInfo.chapter!''}</strong></div>
+					<input type="text" class="hideText input-text" style="width:160px;height:24px;font-size:12px;margin-bottom:6px;" placeholder="请输入相关信息" id="name" value="${chapterInfo.chapter!''}">
+	</div>
+	<div class="pd-10" style="padding:5px 10px 5px 10px">
+		<div  style="padding:0 0 0 5px">
+			<strong>章节内容详情</strong>
+		</div>
+		<div  style="padding:3px 0 5px 5px">
+			<hr/>
+		</div>
+		@if(chapterInfo!=null){
+			<div class="row cl">
+					<div class="formControls col-5">
+						<!-- 实例化编辑器 -->
+						<script type="text/javascript" src="${request.contextPath}/lib/ueditor/ueditor.config.js"></script>
+					    <script type="text/javascript" src="${request.contextPath}/lib/ueditor/ueditor.all.js"></script>
+					    <script type="text/javascript" src="${request.contextPath}/lib/ueditor/lang/zh-cn/zh-cn.js"></script>
+						<!-- 加载编辑器的容器 -->
+			    		<script id="myEditor"  type="text/plain" style="width:850px;height:300px;text-align:center"></script>
+			    		<input type="hidden" value="" name="msgContent" id="msgContent">
+			    	</div>
+					<div class="col-4"> </div>
+				</div>
+		@}else{
+			<div  style="padding:0 0 0 5px;color:gray">
+			暂无内容
+			</div>
+		@}
+		<div  style="padding:5px 0 0 5px">
+			<hr/>
+		</div>
+	</div>
+	
+	
+</div>
+
+@};
+@var js = {
+	<script type="text/javascript" src="${request.contextPath}/lib/My97DatePicker/WdatePicker.js"></script> 
+	<script>
+		$(document).ready(function () {
+			$(".hideText").hide();
+			$("#firstdiv").show();
+			$("#cancel").hide();
+			$("#save").hide();
+		});
+		UE.getEditor('myEditor').addListener("ready", function () {
+       		setDisabled();	
+		});
+		$("#edit").on('click',function(){
+				$(".showText").hide();
+				$(".hideText").show();
+				$("#edit").hide();
+				$("#cancel").show();
+				$("#save").show();
+				setEnabled();
+				
+		});
+		$("#cancel").on('click',function(){
+				window.location.replace(window.location.href);
+		});
+		$("#save").on('click',function(){
+		layer.confirm('修改之后资源需要重新审核，确认修改？', {
+		btn: ['确定','取消']
+		},function(){
+		layer.load(1, {shade: [0.3, '#393D49'], time: 30000})
+				var name=$("#name").val();//标题
+				var msgContent =UE.getEditor('myEditor').getContent();
+        		var content=msgContent;//富文本
+
+
+				$.ajax({
+	    		type : 'POST',
+	    		dataType : 'json',
+	    		url : "${request.contextPath}/chapter/update.html?id=${chapterInfo.id}",
+	    		data : {name:name,content:content},
+		        error : function(e){
+		        	layer.msg('请求错误');
+		        },
+		        success : function(e){
+		        	if(e.code == 200){
+		        		window.location.replace(window.location.href); 
+		        	}
+		        	else{
+		        		layer.msg('操作失败：'+e.msg);
+		        		layer.closeAll('loading'); 
+		        	}
+		        }
+    		})
+			});
+		});
+	</script>
+	<!-- 实例化编辑器 -->
+    <script type="text/javascript">
+        var ue = UE.getEditor('myEditor');
+        ue.ready(function() {
+			ue.setContent('${chapterInfo.content!''}');
+		});
+        function subitBtn(){
+        	var msgContent =UE.getEditor('myEditor').getContent();
+        	$("#msgContent").val(msgContent);
+        }
+ 	</script>
+	<script>
+		function setDisabled() {
+    		UE.getEditor('myEditor').setDisabled('fullscreen');
+   			 
+		};
+		function setEnabled() {
+    		UE.getEditor('myEditor').setEnabled();
+    		
+		};
+</script>
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

@@ -43,12 +43,17 @@ public class BookContentSerciveimpl implements BookContentService {
 	}
 
 	@Override
-	public boolean delBookContent(Integer bid) {
-		return delBookContent(bid);
+	public boolean delBookContent(Integer id) {
+		return bookContentDao.delBookContent(id);
+	}
+
+	@Override
+	public boolean delBookContentall(Integer bid) {
+		return bookContentDao.delBookContentall(bid);
 	}
 
 	@Override
 	public boolean updateBookContent(BookContent bookContent) {
-		return updateBookContent(bookContent);
+		return bookContentDao.updateBookContent(bookContent);
 	}
 }

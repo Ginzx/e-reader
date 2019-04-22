@@ -25,7 +25,7 @@
                 <hr/>
             </div>
             <div class="pic-box coverUrl" id="picbox ">
-                <img id="img" width="140px" height="250px" src="${request.contextPath}/${resInfo.bookurl}">
+                <img id="img" width="140px" height="250px" src="${request.contextPath}${resInfo.bookurl}">
             </div>
 
             <div class="row cl" style="padding:0px 0px 0px 20px;">
@@ -47,7 +47,7 @@
                 <div class="col-5 showText">
                     ${resInfo.classification!''}
                 </div>
-                <select id="categoryId2" class="hideText input-text"
+                <select id="categoryId" class="hideText input-text"
                         style="width:160px;height:26px;font-size:12px;margin-bottom:6px;">
                     @for(category in classifications!){
                     <option value="${category.classificationName}"
@@ -74,10 +74,10 @@
                 <hr/>
             </div>
             <div id="longIntro" class="showText" style="padding:0 0 0 5px">
-                ${resInfo. content!'暂无简介'}
+                ${resInfo.content!'暂无简介'}
             </div>
             <div class="hideText" style="padding:0 0 0 5px">简介
-                <textarea id="talongIntro" rows="8" class="input-text" style="width: 100%;height:auto;">${resInfo. content!''}</textarea>
+                <textarea id="talongIntro" rows="8" class="input-text" style="width: 100%;height:auto;">${resInfo.content!''}</textarea>
             </div>
             <div style="padding:5px 0 0 5px">
                 <hr/>
@@ -89,7 +89,7 @@
                 <input type="button" id="moreChapter" class="btn btn-primary radius"
                        style="float:right;border:0;width:60px;height:25px;padding:0 0 3px 0;font-size:12px;margin-bottom:5px;"
                        value="查看更多"
-                       onclick="layer_full_show_close_reload('章节目录列表','${request.contextPath}/chapter/search.html?,'900','550')">
+                       onclick="layer_full_show_close_reload('章节目录列表','${request.contextPath}/chapter/search.html?bookid=${resInfo.bookid}','900','550')">
             </div>
             <div style="padding:3px 0 0 5px">
                 <hr/>
@@ -188,27 +188,18 @@
             var name = $("#name").val();//标题
             var author = $("#author").val();//作者
             var categoryId = $("#categoryId").val();//分类
-            var longIntro = $("#talongIntro").val();//长简介
+            var longIntro = $("#talongIntro").val();//简介
             var coverUrl = $("#iconUrl").val();
-            var channelIds = "";
-            $('input:checkbox[name=channelId]:checked').each(function (i) {
-                if (0 == i) {
-                    channelIds = $(this).val();
-                } else {
-                    channelIds += ("," + $(this).val());
-                }
-            });
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
-                url: "${request.contextPath}/resource/updateResource.html?",
+                url: "${request.contextPath}/resource/updateResource.html?id=${resInfo.bookid}",
                 data: {
                     name: name,
                     author: author,
                     categoryId: categoryId,
                     longIntro: longIntro,
                     coverUrl: coverUrl,
-                    channelIds: channelIds,
                 },
                 error: function (e) {
                     layer.msg('请求错误');
@@ -219,7 +210,6 @@
                     } else {
                         layer.msg('操作失败：' + e.msg);
                         layer.closeAll('loading');
-                        //window.location.replace(window.location.href);
                     }
                 }
             })
@@ -246,10 +236,14 @@
             error: function (data, status, e) {
 
             },
-            success: function (ret) {
-                if (ret.code == 0) {
-                    $("#img").attr("src", ret.result.url);
-                    document.getElementById("iconUrl").value = ret.result.url;
+            success: function (data) {
+                var reg = /<pre.+?>(.+)<\/pre>/g;
+                var result = data.match(reg);
+                data = RegExp.$1;
+                var res = eval('(' + data + ')');
+                if (res.code == 200) {
+                    $("#img").attr("src", "${request.contextPath}" + res.data);
+                    document.getElementById("iconUrl").value = res.data;
                 } else {
                     alertError(ret.message);
                 }

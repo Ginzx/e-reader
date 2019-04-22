@@ -23,6 +23,12 @@ public class ClassificationServiceimpl implements ClassificationService {
 	public List<Classification> Select() {
 		return classificationDao.Select();
 	}
+
+	@Override
+	public Classification Selectbyid(Integer id) {
+		return classificationDao.Selectbyid(id);
+	}
+
 	@Override
 	public boolean AddClass(Classification classification) {
 		return classificationDao.AddClass(classification);

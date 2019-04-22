@@ -21,7 +21,7 @@ public interface BookService {
 
 	public boolean del(Integer bookid);
 
-	public void updateBook(Integer status,String bookids) throws Exception ;
+	public void updateBook(Integer status,Integer bookids) throws Exception ;
 
 	public Book selectBookbyId(Integer bookid);
 

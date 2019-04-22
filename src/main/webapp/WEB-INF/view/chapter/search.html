@@ -1,0 +1,52 @@
+@var head = {
+	<title>图书章节列表</title>
+@};
+@var content = {
+	<nav class="breadcrumb">
+		<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+	</nav>
+	<div class="pd-20">
+		<form action="${request.contextPath}/chapter/search.html?bookid=${bookid}" method="post" id="searchForm">
+		</form>
+		<div class="cl pd-5 bg-1 bk-gray mt-20">
+			<span class="r">
+				每页显示：
+				<select id="set_pagesize" onchange="setPageSize(this.options[this.options.selectedIndex].value,'${request.contextPath}/','searchForm')">
+					<option value="10">10条</option>
+					<option value="25">25条</option>
+					<option value="50">50条</option>
+					<option value="100">100条</option>
+				</select>
+				&nbsp;&nbsp;总数：<strong><span id="total">${total}</span></strong> 条
+			</span> 
+		</div>
+		<table class="table table-border table-bordered table-bg table-hover">
+			<thead>
+				<tr class="text-c">
+					<th width="5%"><input type="checkbox" name="" value=""></th>
+					<th width="27%">卷/章节名称</th>
+					<th width="8%">排序号</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody id="dataContent">
+				
+			</tbody>
+		</table>
+		<div id="pager" style="padding-top:5px;float:right"></div>
+	</div>
+	
+@};
+@var js = {
+ 	<script>
+		$(document).ready(function () {
+			//初始化表单
+			pager('${request.contextPath}/chapter/list.html', {bookid:${bookid}}, ${total}, page_size);
+		});
+		function localAjaxReload(){
+			pager('${request.contextPath}/chapter/list.html', {bookid:${bookid}}, ${total}, page_size,$(".laypage_curr").text());
+		}
+
+	</script> 
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

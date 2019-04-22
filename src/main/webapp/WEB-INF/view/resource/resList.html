@@ -35,14 +35,14 @@
            class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i>查看详细</a>
         @if(book.Status==1){
         <a title="下架" href="javascript:;"
-           onclick="layer_show('下架资源','${request.contextPath}/resource/updateStatus.html?bookid=${book.bookid},status=2','是否下架该资源')" class="ml-5"
+           onclick="action('下架资源','${request.contextPath}/resource/updateStatus.html?bookid=${book.bookid}&&status=2','是否下架该资源')" class="ml-5"
            style="text-decoration:none"><i class="Hui-iconfont">&#xe6de;</i>下架</a>
         @}else if(book.Status==2||book.Status==0){
         <a title="上架" href="javascript:;"
-           onclick="action('上架资源','${request.contextPath}/resource/updateStatus.html?bookid=${book.bookid},status=1','是否上架该资源')" class="ml-5"
+           onclick="action('上架资源','${request.contextPath}/resource/updateStatus.html?bookid=${book.bookid}&&status=1','是否上架该资源')" class="ml-5"
            style="text-decoration:none"><i class="Hui-iconfont">&#xe6dc;</i>上架</a>
         @}
-        <a title="删除" href="javascript:;" onclick="customDel('删除','${request.contextPath}/resource/del.html?bookid=${book.bookid},status=1?')"
+        <a title="删除" href="javascript:;" onclick="action('删除','${request.contextPath}/resource//delete.html?bookid=${book.bookid}')"
            class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i>删除</a>
     </td>
 </tr>

@@ -88,9 +88,9 @@ public class BookDao {
     }
 
     public boolean AddBook(Book book) {
-        String sql = "insert into book (book_name,Status,author,classification,content,createtime,bookurl)values (?,?,?,?,?,?,?)";
+        String sql = "insert into book (Bookid,book_name,Status,author,classification,content,createtime,bookurl)values (?,?,?,?,?,?,?,?)";
         try {
-            return jdbcTemplate.update(sql, book.getBookName(), book.getStatus(), book.getAuthor(), book.getClassification(),
+            return jdbcTemplate.update(sql,book.getBookid(), book.getBookName(), book.getStatus(), book.getAuthor(), book.getClassification(),
                     book.getContent(), book.getCreateTime(), book.getBookurl()) > 0 ? true : false;
         } catch (Exception e) {
             return false;
@@ -98,7 +98,7 @@ public class BookDao {
     }
 
     public boolean updateBook(Book book) {
-        String sql = "update book set book_name=?,Status=?,author=?,classification=?,content=?,modifetime=?,bookurl=? where Bookid=?";
+        String sql = "update book set book_name=?,Status=?,author=?,classification=?,content=?,modifyTime=?,bookurl=? where Bookid=?";
         try {
             return jdbcTemplate.update(sql, book.getBookName(), book.getStatus(), book.getAuthor(), book.getClassification(),
                     book.getContent(), book.getModifyTime(), book.getBookurl(), book.getBookid()) > 0 ? true : false;
@@ -117,7 +117,7 @@ public class BookDao {
     }
 
     public boolean updateBook(Integer status, Integer bookid) {
-        String sql = "update book set status=? where booid=?";
+        String sql = "update book set status=? where bookid=?";
         try {
             return jdbcTemplate.update(sql, status, bookid) > 0 ? true : false;
         } catch (Exception e) {
@@ -129,7 +129,8 @@ public class BookDao {
         String sql = "select * from Book where bookid=?";
         try {
             RowMapper<Book> rowMapper = BeanPropertyRowMapper.newInstance(Book.class);
-            return jdbcTemplate.queryForObject(sql,rowMapper,bookid);
+            Book bk=jdbcTemplate.queryForObject(sql,rowMapper,bookid);
+            return bk;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

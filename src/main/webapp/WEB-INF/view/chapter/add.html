@@ -1,0 +1,258 @@
+@var head = {
+<title>资源管理-添加</title>
+<style>
+    .cl {
+        margin-bottom: 10px;
+    }
+
+    .col-4 {
+        text-align: left;
+        margin-left: 5px;
+        width: 31%;
+        margin-top: 5px;
+    }
+
+    label {
+        line-height: 31px;
+    }
+
+    .form-label {
+        padding-left: 20px;
+    }
+</style>
+@};
+@var content = {
+<div class="pd-20" style="background:#eff1f4;">
+    <div style="width:70%;background:#fff;margin:0 auto;border-top:1px solid #cbced4">
+        <div style="width:85%;background:#fff;margin:0 auto;padding-top:20px;padding-bottom:20px;">
+            <span style="font-family:微软雅黑;font-size:16px;padding-left:10px;">资源类型</span>
+            <div class="text-c" style=" height: 31px;padding: 10px;">
+                <div class="row cl">
+                    <label class="form-label col-3" style="line-height:31px;">资源类型：</label>
+                    <div class="formControls col-5">
+                        <input type="text" class="input-text" disabled="disabled"
+                               value="图书">
+                    </div>
+                </div>
+            </div>
+            <!-- form1 -->
+            <form action="${request.contextPath}/chapter/add.html" method="post"
+                  id="bookfrom">
+                <div class="text-c" style=" height: 500px;padding: 10px;margin-bottom:20px;"
+                ">
+                <span style="font-family:微软雅黑;font-size:16px;float: left;display:inline-block;width:100%;text-align:left;margin-bottom:10px;">基本信息</span>
+                <div class="row cl" style="margin-top: 10px;">
+                    <label class="form-label col-3"><span class="c-red">*</span>BOOK_id：</label>
+                    <div class="formControls col-5">
+                        <input type="text" class="input-text" value=""
+                               placeholder="输入bookId" id="bookid" name="bookid"
+                               datatype="/^\w{1,32}$/" errormsg="请输入1-32位数字或字母" nullmsg="BOOK_Id不能为空">
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-3"><span class="c-red">*</span>标题：</label>
+                    <div class="formControls col-5">
+                        <input type="text" class="input-text" value="" placeholder="输入标题"
+                               id="name" name="name" datatype="*1-128" nullmsg="标题不能为空">
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-3"><span class="c-red">*</span>作者：</label>
+                    <div class="formControls col-5">
+                        <input type="text" class="input-text" value="" placeholder="输入作者"
+                               id="author" name="author" datatype="*1-32" nullmsg="作者不能为空">
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <input type="hidden" name="fromSource" id="fromSource" value="1">
+                <div class="row cl">
+                    <label class="form-label col-3"><span class="c-red">*</span>分类：</label>
+                    <div class="formControls col-5">
+					<span class="select-box">
+						<select class="select" name="categoryId" id="categoryId" size="1">
+							@for(category in categoryList){
+									<option value="${category.classificationId}">${category.classificationName}</option>
+							@}	
+						</select>
+					</span>
+                    </div>
+                </div>
+                <input type="hidden" value="" name="categoryName" id="categoryName">
+
+                <div class="row cl">
+                    <label class="form-label col-3">图书简介：</label>
+                    <div class="formControls col-5">
+                <textarea name="longIntro" wrap="hard" id="longIntro" cols="" rows="" class="textarea"
+                          placeholder="请在这里输入内容(0/2048字)" datatype="*0-2000" dragonfly="true"
+                          onkeyup="textarealength(this,3000)"></textarea>
+                        <p class="textarea-numberbar"><em class="textarea-length">0</em>/2048</p>
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-3">图书内容：</label>
+                    <span class="">
+                       <span>上传</span>
+                            <input type="file" name="file1" id="file1">
+                         </span>
+                </div>
+
+                <div class="row cl">
+                    <label class="form-label col-3">封面图片：</label>
+                    <p style="text-align:left;color:#f44336;line-height:35px;">建议上传600*800像素的图片,图片支持后缀为jpg/png格式</p>
+                    <!-- <p>图片支持后缀为jpg/png格式</p> -->
+                    <div class="formControls col-5">
+                        <img id="img" width="100px" height="133px" src="${request.contextPath}/images/srcimg1.png"
+                             style="margin-left:60%;margin-bottom:10px;">
+                        <div id="filePicker" class="webuploader-container"
+                             style="float: left;margin-left:60%;width:100%;">
+                            <div style="clear: left;margin-left: 10px;">
+                            </div>
+                            <div class="uploader-thum-container">
+                                <div id="filePicker" class="webuploader-container" style="text-align:left;">
+                                    <input class="webuploader-pick" type="button" value="添加"
+                                           style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:3px 9px;cursor: pointer;float:left;">
+                                    <input class="clear_url" type="button" value="删除"
+                                           style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:3px 9px;margin-left:16px;cursor: pointer;">
+                                    <!-- <div class="webuploader-pick">选择图片</div> -->
+                                    <div id="rt_rt_1agrit9p86a6102613rm2vu1gkr1"
+                                         style="width:45px; height: 30px; overflow: hidden; bottom: auto; right: auto;position:absolute;left:0;top:0;">
+                                        <input type="file" name="myfiles" id="file" onchange="getpath()" class=""
+                                               style="cursor:pointer;position:relative;left: 0;top: 0;width:200px;height:130%;opacity:0;font-size:100px;"
+                                               multiple="multiple" accept="image/*">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" value="" name="coverUrl" id="coverUrl">
+                </div>
+
+        </div>
+        </form>
+        <div class="text-c"style=" height: 40px;overflow:hidden;width:90%;padding-top:20px;margin-left:15%;">
+            <div class="row cl">
+                <div class=" col-offset-3" style="float: left;overflow:hidden;">
+                    <input class="btn btn-primary radius" type="submit" id="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                </div>
+                <div class=" col-offset-3" style="float: left;margin-left:5%;">
+                    <input class="btn btn-primary radius" type="button" style="background-color:#B9D3EE" id="Reset" value="&nbsp;&nbsp;重置&nbsp;&nbsp;">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@};
+@var js = {
+<script type="text/javascript" src="${request.contextPath}/lib/Validform/5.3.2/Validform.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/lib/jquery.form.js"></script>
+<script>
+
+    $(".clear_url").click(function () {
+        /* $("#img").attr("src","../images/srcimg1.png"); */
+        $(this).parents("#filePicker").siblings("#img").attr("src", "../images/srcimg1.png");
+        $(this).parents(".col-5").siblings("#coverUrl").val("");
+    })
+    var form = "";
+    $(document).ready(function () {
+        showHidden();
+    });
+
+    function showHidden() {
+        // var type=$("#choiceType").val();
+        $("#bookfrom").show();
+        // $("#documentfrom").hide();
+        // $("#imgsfrom").hide();
+        // $("#audiofrom").hide();
+        // $("#videofrom").hide();
+        form = "bookfrom";
+        validSubmit('bookfrom');
+        function validSubmit(formId){
+            $('#' + formId).Validform({
+                tiptype : 2,
+                ajaxPost : true,
+                postonce:true,
+                beforeSubmit : function(form){
+                    var options = {
+                        success : function(e){
+                            if(e.code == 200){
+                                layer.msg('添加成功');
+                            }
+                            else{
+                                layer.msg(e.msg);
+                            }
+                        },
+                        error : function(e){
+                            layer.close(index);
+                            layer.msg('加载失败');
+                        }
+                    };
+
+                    $(form[0]).ajaxSubmit(options);
+                    layer.closeAll('dialog');
+                    return false;
+                }
+            });
+
+        }
+    }
+
+    $("#Reset").click(function () {
+        $("form input").val("");
+        $("#filePicker .webuploader-pick").val("添加");
+        $("#filePicker .clear_url").val("删除");
+        $("form #img").attr("src", "../images/srcimg1.png");
+        $("form textarea").val("");
+        $(".col-4 span").removeClass().addClass("Validform_checktip");
+        layer.msg("重置成功");
+    })
+    $("#submit").click(function () {
+        var type = $("#choiceType").val();
+        var option = $("#" + form + " #categoryId option:selected");
+        $("#" + form + " #categoryName").val(option.text());
+        $("#" + form).submit();
+    })
+
+    /* function clp() {
+        var file= "#"+form+" #file";
+        $(file).click();
+    } */
+    function getpath() {
+        fileupload();
+    }
+
+    function fileupload() {
+        $.ajaxFileUpload({
+            url: "${request.contextPath}/resource/uploadImg.html",
+            type: 'POST',
+            secureuri: false,
+            fileElementId: "file", // 上传文件的id、name属性名
+            dataType: 'text',
+            cache: false,
+            timeout: 300000,
+            error: function (e) {
+                layer.msg(e)
+            },
+            success: function (data) {
+                var reg = /<pre.+?>(.+)<\/pre>/g;
+                var result = data.match(reg);
+                data = RegExp.$1;
+                var res = eval('(' + data + ')');
+                if (res.code == 200) {
+                    var img = "#" + form + " #img";
+                    $(img).attr("src", "${request.contextPath}" + res.data);
+                    $("#" + form + " #coverUrl").val(res.data);
+                    layer.msg("上传成功");
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+        });
+    }
+
+</script>
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

@@ -31,6 +31,16 @@ public class ClassificationDao {
 		}
 	}
 
+	public Classification Selectbyid(Integer id) {
+		String sql = "select * from Classification where classification_id=?  ";
+		try {
+			RowMapper<Classification> rowMapper = BeanPropertyRowMapper.newInstance(Classification.class);
+			return jdbcTemplate.queryForObject(sql, rowMapper, id);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 	public boolean AddClass(Classification classification) {
 		String sql = "insert into classification (classification_name) values(?)";
 		try {

@@ -188,6 +188,7 @@ function validSubmitFormAndRefreshParent(formId){
 //						parent.location.replace(parent.location.href);
 						parent.localAjaxReload();
 						parent.layer.close(parentIndex);
+                        layer.msg("成功");
 					}
 					else{
 						layer.msg(e.msg);
