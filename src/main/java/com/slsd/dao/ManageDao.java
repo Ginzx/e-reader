@@ -64,8 +64,8 @@ public class ManageDao {
 				sqlParams.add("%" + manager.getAccount() + "%");
 			}
 			if (manager.getName()!="") {
-				sql += "and name like ?";
-				sqlParams.add("%" + manager.getAccount() + "%");
+				sql += "and manager.name like ?";
+				sqlParams.add("%" + manager.getName() + "%");
 			}
 			if (manager.getStatus() != null && manager.getStatus() > 0) {
 				sql += "and status=?";

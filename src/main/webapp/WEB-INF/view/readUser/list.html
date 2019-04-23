@@ -1,0 +1,44 @@
+@if(readUsers.~size<1){
+<!-- 无数据提示 -->
+<tr class="text-c">
+    <td valign="top" colspan="14">没有找到匹配的记录</td>
+</tr>
+@}else{
+@for(readUser in readUsers){
+<tr class="text-c">
+    <td>
+        <input type="checkbox" value="${readUser.uId}" name="chkId">
+    </td>
+    <td>${readUser.userName!''}
+    </td>
+    <td>${readUser.name!''}</td>
+
+    <td>${readUser.phone!''}</td>
+    <td>
+        ${readUser.usergroup!''}
+    </td>
+    <td>${readUser.IdCard!''}</td>
+    <td>${readUser.RegisterTime!''}</td>
+    <td class="td-manage">
+        <a title="编辑" href="javascript:;"
+           onclick="layer_full_show('修改信息','${request.contextPath}/readUser/update.html?id=${readUser.uId}')"
+           class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i>编辑</a>
+    </td>
+</tr>
+
+@}
+<script>
+    $(document).ready(function () {
+        //排序更新(防止出现上一页数据)
+        $(".tablesorter").trigger("update");
+    });
+    $("input[name='chkId']").each(function () {
+        $(this).on('click', function () {
+            if (!$(this).is(':checked')) {
+                $("input[name='']").attr("checked", false);
+            }
+        })
+    })
+</script>
+@}
+

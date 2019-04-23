@@ -1,0 +1,134 @@
+@var head = {
+	<title>导航管理-编辑导航</title>
+@};
+@var content = {
+	<div class="pd-20" style="background:#eff1f4;">
+		<form action="${request.contextPath}/readUser/update.html?id=${readUser.uId}" method="post" class="form form-horizontal" id="updateForm" style="width:70%;background:#fff;margin:0 auto;border-top:1px solid #cbced4">
+			<div class="detailHead" style="background:#ff; color:#000;border:none;text-align:left;margin-left:9%;padding:10px 0 0 0;">用户基本信息</div>
+			<div class="row cl">
+				<label class="form-label col-3">账号：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="${readUser.userName!''}" placeholder="输入账号" id="account" name="account" datatype="*0-32" nullmsg="账号不能为空" disabled>
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">姓名：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="${readUser.name!''}" placeholder="真实姓名" id="name" name="name" datatype="*0-32"
+					disabled
+					>
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">分组：</label>
+				<div class="formControls col-5"> <span class="select-box" style="width:150px;">
+					<select class="select" name="groupId" size="1">
+						<option value="">暂不分组</option>
+						@for(readGroup in readGroups){
+						<option value="${readGroup.groupid}"
+						@if(readUser.usergroup!''==readGroup.groupname){
+							selected
+						@}
+						>${readGroup.groupname}</option>
+						
+						@}
+					</select>
+					</span> 
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">手机号码：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="${readUser.phone!''}" placeholder="请输入手机号码" id="phone" name="phone" datatype="m,n11-11|n0-0" errormsg="手机号错误"
+					disabled
+					>
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">证件号码：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="${readUser.IdCard!''}" placeholder="请输入证件号码" id="cardNo" name="cardNo" datatype="*0-64"
+					disabled
+					>
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">邮箱：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="${readUser.EMail!''}" placeholder="请输入邮箱" id="email" name="email" datatype="*0-64"
+					disabled
+					>
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">注册时间：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="${readUser.RegisterTime!,dateFormat="yyyy-MM-dd"}" placeholder="" id="registerTime" name="registerTime" datatype="*0-64" readOnly disabled>
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">注册IP：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="${readUser.RegisterIp!''}" placeholder="" id="registerIp" name="registerIp" datatype="*0-64" disabled>
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<br/>
+
+			<div class="row cl">
+				<div class="col-9 col-offset-3" style="margin-left:55%;margin-bottom:20px;">
+					<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+				</div>
+			</div>
+		</form>
+	</div>
+		<style type="text/css">
+	.detailHead a{display: inline-block;width: 24px;height: 24px;background-image:url(../images/headIcon.png);background-size: 100%;background-repeat: no-repeat;}
+		.detailHead a.backBtn{background-position:0px -124px; }
+		.detailHead a.searchBtn{background-position: 0px 0px;}
+		.detailHead a.homeBtn{background-position: 0px -72px;}
+		.detailHead {
+    		background-color: #fff;
+   			border-bottom: #fff;
+    		color: #3a444c;
+    		border-bottom: 1px solid #d8dadb;
+     		position: relative;
+    		padding: 10px 0;
+    		text-align: center;
+    		font-size: 19px;
+		}
+		.detailHead a {
+    		position: absolute;
+    		top: 50%;
+    		margin-top: -12px;
+    		width: 24px;
+		}
+		.detailHead .backBtn {
+    		left: 15px;
+		}
+		.detailHead .homeBtn {
+   			right: 15px;
+		}
+		.detailHead .searchBtn {
+   			right: 45px;
+		}
+	
+	</style>
+@};
+@var js = {
+	<script type="text/javascript" src="${request.contextPath}/lib/Validform/5.3.2/Validform.min.js"></script> 
+	<script type="text/javascript" src="${request.contextPath}/lib/jquery.form.js"></script>
+	<script>
+		$(document).ready(function () {
+			validSubmitFormAndRefreshParent('updateForm');
+				$("input").css("readonly","readonly");
+		});
+	</script>
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

@@ -1,0 +1,107 @@
+@var head = {
+	<title>用户管理</title>
+	<style type="text/css">
+		b{min-width:80px;}
+	</style>
+@};
+@var content = {
+	<nav class="breadcrumb">
+		<i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>用户管理
+		<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+	</nav>
+	<div class="container">
+		<div class="row" >
+
+    <div
+		 class="pd-20 col-10"
+	id="contentDiv" style="width: 100%">
+		<div class="text-c" style="margin-bottom:20px;">
+			<form action="${request.contextPath}/readUser/search.html" method="post" id="searchForm" class="liform">
+				<li>
+					<b>账号：</b>
+					<input type="text" class="input-text" style="width:130px" placeholder="输入账号" id="" name="account" value="${account!''}">
+				</li>
+				<li>
+					<b>姓名：</b>
+					<input type="text" class="input-text" style="width:130px" placeholder="输入姓名" id="" name="name" value="${name!''}">
+				</li>
+				<li>
+					<b>手机号码：</b>
+					<input type="text" class="input-text" style="width:130px" placeholder="输入手机号码" id="" name="phone" value="${phone!''}">
+				</li>
+				<li>
+					<b>证件号码：</b>
+					<input type="text" class="input-text" style="width:130px" placeholder="输入证件号码" id="" name="cardNo" value="${cardNo!''}">
+				</li>
+				<li>
+					<b>分组：</b>
+					<span class="select-box" style="width:130px;">
+						<select class="select" name="groupId">
+							<option value="">全部</option>
+							@for(readGroup in readGroups){
+							<option value="${readGroup.groupid}"
+								@if(groupId!''==readGroup.groupid){
+									selected
+								@}
+							>${readGroup.groupname}</option>
+							@}
+						</select>
+					 </span> 
+				</li>
+
+				<button type="submit" id="userSubmit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+			</form>
+		</div>
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+				<span class="l">
+							<a href="javascript:;" onclick="layer_full_show('新增','${request.contextPath}/readUser/add.html')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 新增</a>
+				</span> 
+			<span class="r">
+				每页显示：
+				<select id="set_pagesize" onchange="setPageSize(this.options[this.options.selectedIndex].value,'${request.contextPath}/','searchForm')">
+					<option value="10">10条</option>
+					<option value="25">25条</option>
+					<option value="50">50条</option>
+					<option value="100">100条</option>
+				</select>
+				&nbsp;&nbsp;总数：<strong>${total}</strong> 条
+			</span> 
+		</div>
+		<table class="table table-border table-bordered table-bg table-hover tablesorter" style="table-layout: fixed;">
+			<thead>
+				<tr class="text-c">
+					<th width="3%"><input type="checkbox" name="" value=""></th>
+					<th width="14%">登录账号</th>
+					<th width="8%">姓名</th>
+					<th width="8%">手机号码</th>
+					<th width="7%">分组</th>
+					<th width="8%">证件号码</th>
+					<th width="8%">注册时间</th>
+					<th width="13%">操作</th>
+				</tr>
+			</thead>
+			<tbody id="dataContent">
+				
+			</tbody>
+		</table>
+		<div id="pager" style="padding-top:5px;float:right"></div>
+	</div></div></div>
+	
+@};
+@var js = {
+<script type="text/javascript" src="${request.contextPath}/lib/My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="${request.contextPath}/lib/ztree/jquery.ztree.all-3.5.min.js"></script>
+<link href="${request.contextPath}/lib/ztree/zTreeStyle.css" rel="stylesheet" type="text/css" />
+ 	<script>
+		$(document).ready(function () {
+			pager('${request.contextPath}/readUser/list.html', {groupId:"${groupId!''}",cardNo:"${cardNo!''}",account:"${account!''}",name:"${name!''}",phone:"${phone!''}"}, ${total}, page_size);
+			//排序初始化，第一列不进行排序(索引从0开始)
+		});
+		function localAjaxReload(){
+			pager('${request.contextPath}/readUser/list.html', {groupId:"${groupId!''}",cardNo:"${cardNo!''}",account:"${account!''}",name:"${name!''}",phone:"${phone!''}"}, ${total}, page_size,$(".laypage_curr").text());
+			$("input[name='']").attr("checked",false);
+		}
+
+	</script> 
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

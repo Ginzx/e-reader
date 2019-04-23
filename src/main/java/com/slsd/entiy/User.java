@@ -21,6 +21,15 @@ public class User implements Serializable {
 	private String phone;//电话号码
 	private String imgeUrl;//头像地址
 	private String name;//用户姓名
+	private String usergroup;
+
+	public String getUsergroup() {
+		return usergroup;
+	}
+
+	public void setUsergroup(String usergroup) {
+		this.usergroup = usergroup;
+	}
 
 	@Override
 	public String toString() {
