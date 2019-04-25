@@ -1,0 +1,95 @@
+@var head = {
+	<title>活动管理</title>
+@};
+@var content = {
+	<nav class="breadcrumb">
+		<i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>活动管理
+		<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+	</nav>
+	<div class="container">
+	<div class="col-md-10" id="contentDiv" style="width: 100%">
+		<div class="text-c"  style="margin-bottom:20px;">
+			<form id="searchForm" action="${request.contextPath}/activity/qryReadActivityCount.html" method="post" class="liform" style="margin-left:10px;">
+				<li>
+					<b>活动名称：</b>
+					<input type="text" class="input-text" style="width:160px" placeholder="输入活动名称" id="" name="name" value="${name!''}">
+				</li>
+				<li>
+					 <b>发布状态：</b>
+					<span class="select-box" style="width:150px">
+						<select name="publishStatus" class="select">
+							<option value="">全部</option>
+							<option value="0"
+							@if(publishStatus!'' == 0){
+							 selected
+							@} 
+							>未上架</option>
+						    <option value="1"
+						    @if(publishStatus!'' == 1){
+							 selected
+							@}
+						    >已上架</option>
+						     <option value="2"
+						    @if(publishStatus!'' == 2){
+							 selected
+							@}
+						    >已下架</option>
+						 </select>
+					 </span>
+					<button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+				</li>
+			</form>
+		</div>
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+			<span class="l liform">
+				<li><a href="javascript:;" onclick="layer_full_show('添加活动','${request.contextPath}/activity/addReadActivity.html','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>添加活动</a></li>
+			</span> 
+			<span class="r">
+				每页显示：
+				<select id="set_pagesize" onchange="setPageSize(this.options[this.options.selectedIndex].value,'${request.contextPath}/','searchForm')">
+					<option value="10">10条</option>
+					<option value="25">25条</option>
+					<option value="50">50条</option>
+					<option value="100">100条</option>
+				</select>
+				&nbsp;&nbsp;总数：<strong id="total">${total}</strong> 条
+			</span> 
+		</div>
+		<table class="table table-border table-bordered table-bg table-hover tablesorter">
+			<thead>
+				<tr class="text-c">
+					<th width="5%"><input type="checkbox" name="" value=""></th>
+					<th width="10%">活动名称</th>
+					<th width="6%">发布状态</th>
+					<th width="6%">发布者</th>
+					<th width="14%">创建时间</th>
+					<th width="22%">操作</th>
+				</tr>
+			</thead>
+			<tbody id="dataContent">
+			</tbody>
+		</table>
+		<div id="pager" style="padding-top:5px;float:right"></div>
+	</div></div>
+@};
+@var js = {
+<link href="${request.contextPath}/lib/ztree/zTreeStyle.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="${request.contextPath}/lib/ztree/jquery.ztree.all-3.5.min.js"></script>
+<script>
+		$(document).ready(function () {
+			//初始化表单
+			pager('${request.contextPath}/activity/qryReadActivityList.html', {name:"${name!''}",publishStatus:"${publishStatus!''}"}, ${total}, page_size,1);
+			//排序初始化，第一列不进行排序(索引从0开始) 
+			$.tablesorter.defaults.headers = {0: {sorter: false},1: {sorter: false},2: {sorter: false},3: {sorter: false},4: {sorter: false},5: {sorter: false}};
+			$(".tablesorter").tablesorter();
+		});
+		function freshPage(){
+			pager('${request.contextPath}/activity/qryReadActivityList.html', {name:"${name!''}",publishStatus:"${publishStatus!''}"}, ${total}, page_size,$(".laypage_curr").text());
+		}
+		function localAjaxReload(){
+			pager('${request.contextPath}/activity/qryReadActivityList.html', {name:"${name!''}",publishStatus:"${publishStatus!''}"}, ${total}, page_size,$(".laypage_curr").text());
+		}
+
+	</script>
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

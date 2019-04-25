@@ -1,0 +1,61 @@
+@if(ReadActivityList.~size<1){
+<!-- 无数据提示 -->
+<tr class="text-c">
+    <td valign="top" colspan="10">没有找到匹配的记录</td>
+</tr>
+<script>
+    $(document).ready(function () {
+        $("#total").text(${total});
+    });
+</script>
+@}else{
+@for(readActivity in ReadActivityList){
+<tr class="text-c">
+    <td>
+        <input type="checkbox" value="${readActivity.id}" name="chkId">
+    </td>
+    <td>
+        ${readActivity.name!}
+    </td>
+    <td class="td-status">
+        @if(readActivity.publishStatus == 0){
+        未上架
+        @}else if(readActivity.publishStatus == 1){
+        已上架
+        @}else if(readActivity.publishStatus == 2){
+        已下架
+        @}
+    </td>
+    <td>${readActivity.publishUser!}</td>
+    <td>${readActivity.createTime!,dateFormat="yyyy-MM-dd HH:mm:ss"}</td>
+    <td class="td-manage">
+
+        <a title="查看详情" href="javascript:;"
+           onclick="layer_full_show('活动预览','${request.contextPath}/activity/updateReadActivity.html?activityId=${readActivity.id}')"
+           class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i>查看详情</a>
+        @if(readActivity.publishStatus==1){
+        <a title="下架" href="javascript:;"
+           onclick="action('', '${request.contextPath}/activity/ActivityGrounding.html?activityId=${readActivity.id}&Stauts=2','是否下架活动')"
+           class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6de;</i>下架</a>
+        @}else{
+        <a title="上架" href="javascript:;"
+           onclick="action('', '${request.contextPath}/activity/ActivityGrounding.html?activityId=${readActivity.id}&Stauts=1','是否上架活动')"
+           class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6dc;</i>上架</a>
+        @}
+        @if(readActivity.publishStatus!=1){
+        <a title="删除" href="javascript:;"
+           onclick="del('${readActivity.id}', '${request.contextPath}/activity/delReadActivity.html?id=${readActivity.id}')"
+           class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i>删除</a>
+        @}
+    </td>
+</tr>
+@}
+<script>
+    $(document).ready(function () {
+        //排序更新(防止出现上一页数据)
+        $(".tablesorter").trigger("update");
+        $("#total").text(${total!});
+    });
+</script>
+@}
+

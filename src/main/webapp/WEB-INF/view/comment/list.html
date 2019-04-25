@@ -1,0 +1,59 @@
+@if(comments.~size<1){
+<!-- 无数据提示 -->
+	<tr class="text-c">
+		<td valign="top" colspan="12">没有找到匹配的记录</td>
+	</tr>
+	<script>
+		$(document).ready(function () {
+			//排序更新(防止出现上一页数据)
+			$(".tablesorter").trigger("update");
+			$("#total").text(${total!'0'});
+		});
+		
+	</script>
+@}else{
+	@for(comment in comments){
+	<tr class="text-c">
+		<td>
+			<input type="checkbox" value="${comment.id}" name="chkId">
+		</td>
+		<td>${comment.account!''}</td>
+		<td title="${comment.content!''}">			
+			@if(strutil.length(comment.content!'')>25){
+				${strutil.subStringTo (comment.content, 0,25)}....				
+			@}else{
+				${comment.content!''}
+			@}
+		</td>
+		<td>${comment.resource!''}</td>
+		<td class="td-status">
+			@if(comment.status == 0){
+			<img title="待审核" width=20px height=20px src="${request.contextPath}/images/todo.png"/>
+			@}
+			@if(comment.status == 1){
+			<img title="通过" width=20px height=20px src="${request.contextPath}/images/done.png"/>
+			@}
+			@if(comment.status == 2){
+			<img title="不通过" width=20px height=20px src="${request.contextPath}/images/unpass.png"/>
+			@}
+		</td>
+		<td>${comment.createTime!,dateFormat="yyyy-MM-dd HH:mm:ss"}</td>
+	</tr>
+
+	@}
+	<script>
+		$(document).ready(function () {
+			//排序更新(防止出现上一页数据)
+			$(".tablesorter").trigger("update");
+			$("#total").text(${total!'0'});
+		});
+		$("input[name='chkId']").each(function(){
+			$(this).on('click',function(){
+				if(!$(this).is(':checked')){    
+					$("input[name='']").attr("checked",false);
+				}
+			})
+		})
+	</script>
+@}
+

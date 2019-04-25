@@ -1,0 +1,192 @@
+@var head = {
+	<title>活动管理-修改活动</title>
+	<style type="text/css">
+	    body{background:#eff1f4;}
+	    pre p img{width:100%;}
+	</style>
+@};
+@var content = {
+	<div style="width:55%;float: left;background:#fff;margin:2%;">
+		<form action="${request.contextPath}/activity/updateReadActivity.html?activityId=${readActivity.id}" method="post" class="form form-horizontal" id="createForm"  onsubmit="return subitBtn()">
+			<div class="row cl">
+				<label class="form-label col-3"><span class="c-red">*</span>活动名称：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="${readActivity.name}" placeholder="输入活动名称" id="name" name="name" datatype="*1-32" nullmsg="活动名称不能为空">
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-3">副标题：</label>
+				<div class="formControls col-5">
+					<input type="text" class="input-text" value="${readActivity.title}" placeholder="输入副标题"  id="title" name="title" datatype="*0-64" nullmsg="标题不能为空" onkeyup="changeTitle()">
+				</div>
+				<div class="col-4"> </div>
+			</div>
+			<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>banner图片：</label>
+			<div class="formControls col-5" id="banners">
+				<div class="uploader-thum-container">
+					@if(readActivity.publishStatus!=1){
+					<small style="color:#f35f57;">&nbsp&nbsp&nbsp750*250px 支持图片后缀(.jpg/.png)</small>
+					@}
+					<div id="fileList" class="uploader-list" style="width:100%;background:#f2f2f2 url('../images/srcbk.png') no-repeat center;width:215px;height:130px;"><div id="WU_FILE_0" class="item" 
+					@if(readActivity.bannerImgs! == null||readActivity.bannerImgs! ==""){
+					style="display: none;"
+					@}
+					><div class="pic-box" id="picbox"><img id="img"  width="215px" height=130 src="${readActivity.bannerImgs}"></div><div class="info"></div><p class="state" id="wait" style="display: none;">正在上传...</p></div></div>
+					<div id="filePicker" class="webuploader-container" style="margin-top:8px;">
+					@if(readActivity.publishStatus!=1){
+					<input class="webuploader-pick" type="button" value="添加" style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:3px 9px;cursor: pointer;float:left;">
+					<!--  <div class="webuploader-pick"  style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:0px 7px;float:left;">添加</div>-->
+					<input class="clear_url" type="button" value="删除" style="background:#e7e7e7;color:#464b51;border:1px solid #b5b5b5;border-radius:5px;padding:3px 9px;margin-left:16px;cursor: pointer;">
+					@}
+					<div id="rt_rt_1agrit9p86a6102613rm2vu1gkr1" style="position: absolute; top: 0px; left: 0px; width: 45px; height: 30px; overflow: hidden; bottom: auto; right: auto;">
+					@if(readActivity.publishStatus!=1){
+					<input type="file" name="myfiles" id="file" onchange="getpath('banners')" class="" style="cursor:pointer;position:relative;left: 0;top: 0;width:200px;height:130%;opacity:0;font-size: 100px;" multiple="multiple" accept=".jpg,.png">
+					@}
+					</div>
+					</div>
+				</div>
+			</div>
+				<input type="hidden" value="${readActivity.bannerImgs}" name="bannerImg" id="bannersImg">
+			</div>
+			
+			<div class="row cl" id="contentDiv">
+				<label class="form-label col-3">活动简介：</label>
+				<div class="formControls col-5">
+					<!-- 实例化编辑器 -->
+					<script type="text/javascript" src="${request.contextPath}/lib/ueditor/ueditor.config.js"></script>
+				    <script type="text/javascript" src="${request.contextPath}/lib/ueditor/ueditor.all.min.js"></script>
+				    <script type="text/javascript" src="${request.contextPath}/lib/ueditor/lang/zh-cn/zh-cn.js"></script>	
+					<!-- 加载编辑器的容器 -->
+		    		<script id="myEditor1"  type="text/plain" style="width:400px;height:200px;"></script>
+		    		<input type="hidden" value="" name="content" id="content">
+		    	</div>
+				<div class="col-4"> </div>
+			</div>
+				<div class="row cl" id="contentDiv">
+				<label class="form-label col-3">活动尾语：</label>
+				<div class="formControls col-5">
+					<!-- 实例化编辑器 -->
+					<script type="text/javascript" src="${request.contextPath}/lib/ueditor/ueditor.config.js"></script>
+				    <script type="text/javascript" src="${request.contextPath}/lib/ueditor/ueditor.all.min.js"></script>
+				    <script type="text/javascript" src="${request.contextPath}/lib/ueditor/lang/zh-cn/zh-cn.js"></script>	
+					<!-- 加载编辑器的容器 -->
+		    		<script id="myEditor2"  type="text/plain" style="width:400px;height:200px;"></script>
+		    		<input type="hidden" value="" name="contentEnd" id="contentEnd">
+		    	</div>
+				<div class="col-4"> </div>
+			</div>
+
+			
+			<div class="row cl">
+				<div class="col-9 col-offset-3">
+							<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+				</div>
+			</div>
+		</form>
+	</div>
+	<div style="float:left;width:35% ;background-image: url();background:#fff;margin:2%;" class="cover">
+		<img alt="" src="${readActivity.bannerImgs}" width="100%" height="130px" class="banners">
+		<p style="text-align: center;font-family:微软雅黑;font-size:18px;" id="showTitle" >
+		@if(readActivity.title!=null){
+			${readActivity.title}
+		@}else{
+			${readActivity.name}
+		@}
+		</p>
+		<pre style="background-color:transparent;border: 0px;font-size:15px;margin-top: -20px;" id="showContent">${readActivity.content}</pre>
+
+		  	<pre style="background-color:transparent;border: 0px;font-size:15px;margin-top: -20px;" id="showContent">${readActivity.contentEnd}</pre>
+		</div>
+		
+	</div>
+@};
+@var js = { 
+	<script type="text/javascript" src="${request.contextPath}/lib/Validform/5.3.2/Validform.min.js"></script> 
+	<script type="text/javascript" src="${request.contextPath}/lib/jquery.form.js"></script>
+	<script>
+		$(document).ready(function () {
+			validSubmitFormAndRefreshParent('createForm');
+		});
+		$(".clear_url").click(function(){
+			$(this).parent().siblings("#fileList").find("#img").attr("src","../images/srcimg.png");
+			$("#bannersImg").val("");
+		})
+	</script>
+	<script>
+		function fileupload(b){
+			$.ajaxFileUpload({
+                url: "${request.contextPath}/resource/uploadImg.html",
+                type: 'POST',
+                secureuri: false,
+                fileElementId:b+" #file", // 上传文件的id、name属性名
+                dataType: 'text',
+                cache: false,
+                timeout: 300000,
+                error: function (data,status,e){
+                
+                },
+                success: function (data) {
+                    var reg = /<pre.+?>(.+)<\/pre>/g;
+                    var result = data.match(reg);
+                    data = RegExp.$1;
+                    var res = eval('(' + data + ')');
+               if(res.code == 200){
+                	 $("#"+b+" #img").attr("src",res.data);
+               		 $("#"+b+" #wait").hide();
+                	 $("#"+b+" #picbox").show();
+                	 $("#"+b+"Img").val(res.data);
+                	 $("."+b).attr("src",res.data);
+                	 $("."+b).css("background-image", "url("+res.data+")")
+                	
+                	layer.msg("上传成功");
+                }else{
+               		 layer.msg("上传失败")}
+                }
+            });  
+        } ;
+         function getpath(b){
+         	var name=$("#"+b+" #file").val();
+			name = name.substring(name.lastIndexOf("."),name.length);
+			if(name!=".jpg"&&name!=".png"&&name!=".JPG"&&name!=".PNG"&&name!=".jpeg"&&name!=".JPEG"){
+				layer.msg("您上传的图片格式不正确，请重新选择!");
+			}else{
+		    	$("#"+b+" #WU_FILE_0").show();
+		    	$("#"+b+" #wait").show();
+		    	$("#"+b+" #picbox").hide();
+		    	fileupload(b);
+	    	}
+        };
+        function clp(a){
+			$("#"+a+" #file").click();
+		};
+		
+		function changeTitle(){
+			$("#showTitle").html($("#title").val())
+		}
+		function localAjaxReload(){
+			parent.localAjaxReload();
+			parent.$(".layui-layer-setwin .layui-layer-close1").click();
+		}
+	</script>
+	<!-- 实例化编辑器 -->
+    <script type="text/javascript">
+        var ue1 = UE.getEditor('myEditor1');
+        var ue2 = UE.getEditor('myEditor2');
+        ue1.ready(function() {
+							 ue1.setContent('${readActivity.content}');
+						 })
+		ue2.ready(function() {
+							 ue2.setContent('${readActivity.contentEnd}');
+		})
+        function subitBtn(){
+        	var content =UE.getEditor('myEditor1').getContent();
+        	$("#content").val(content);
+        	var contentEnd =UE.getEditor('myEditor2').getContent();
+        	$("#contentEnd").val(contentEnd);
+			return false;
+        }
+ 	</script>
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}

@@ -1,0 +1,117 @@
+@var head = {
+	<title>评论管理</title>
+	<style type="text/css">
+		b{min-width:80px;}
+	</style>
+@};
+@var content = {
+	<nav class="breadcrumb">
+		<i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 评论管理
+		<a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+	</nav>
+	<div class="container">
+
+	<div style="width: 100%"
+		 class="pd-20 col-10"
+	id="contentDiv">
+		<div class="text-c"  style="margin-bottom:20px;">
+			<form action="${request.contextPath}/comment/search.html" method="post" id="searchForm" class="liform">
+				<li>
+					<b>用户账号：</b>
+					<input type="text" class="input-text" style="width:130px" placeholder="输入用户账号" id="" name="account" value="${account!''}">
+				</li>
+				<li>
+					<b>审核状态：</b>
+					<span class="select-box" style="width:130px">
+						<select name="checkFlag" class="select">
+						<option value="">全部</option>
+							<option value="0"
+							@if(checkFlag!'' == 0){
+							 selected
+							@} 
+							>未审核</option>
+						    <option value="1"
+						    @if(checkFlag!'' == 1){
+							 selected
+							@}
+						    >审核通过</option>
+						    <option value="2"
+						    @if(checkFlag!'' == 2){
+							 selected
+							@}
+						    >审核未通过</option>
+						 </select>
+					 </span>
+				</li>
+				<li>
+					<button type="submit" id="commentSubmit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+				</li>
+			</form>
+		</div>
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+			<span class="l">
+				<a href="javascript:;" onclick="dels('${request.contextPath}/comment/batchdelete.html?')" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 删除</a>
+
+				<a href="javascript:;" onclick="checks('${request.contextPath}/comment/batchCheck.html?checkFlag=1')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe6e1;</i> 审核通过</a>
+
+				<a href="javascript:;" onclick="checks('${request.contextPath}/comment/batchCheck.html?checkFlag=2')" class="btn btn-warning radius"><i class="Hui-iconfont">&#xe6dd;</i> 审核不通过</a>
+
+			</span> 
+			<span class="r">
+				每页显示：
+				<select id="set_pagesize" onchange="setPageSize(this.options[this.options.selectedIndex].value,'${request.contextPath}/','searchForm')">
+					<option value="10">10条</option>
+					<option value="25">25条</option>
+					<option value="50">50条</option>
+					<option value="100">100条</option>
+				</select>
+				&nbsp;&nbsp;总数：<strong><span id="total">${total}</span></strong> 条
+			</span> 
+		</div>
+		<table class="table table-border table-bordered table-bg table-hover tablesorter" style="table-layout: fixed;">
+			<thead>
+				<tr class="text-c">
+					<th ><input type="checkbox" name="" value=""></th>
+					<th >用户账号</th>
+					<th >评论内容</th>
+					<th >评论资源</th>
+					<th >审核状态</th>
+					<th >评论时间</th>
+				</tr>
+			</thead>
+			<tbody id="dataContent">
+				
+			</tbody>
+		</table>
+		<div id="pager" style="padding-top:5px;float:right"></div>
+	</div></div></div>
+	
+@};
+@var js = {
+<link href="${request.contextPath}/lib/ztree/zTreeStyle.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="${request.contextPath}/lib/ztree/jquery.ztree.all-3.5.min.js"></script>
+	<script type="text/javascript" src="${request.contextPath}/lib/My97DatePicker/WdatePicker.js"></script> 
+ 	<script>
+		$(document).ready(function () {
+			//初始化表单
+			pager('${request.contextPath}/comment/list.html', {account:"${account!''}",checkFlag:"${checkFlag!''}"}, ${total}, page_size);
+			//排序初始化，第一列不进行排序(索引从0开始) 
+			$.tablesorter.defaults.headers = {0: {sorter: false},1: {sorter: false},2: {sorter: false},3: {sorter: false},4: {sorter: false},5: {sorter: false},6: {sorter: false}};
+			$(".tablesorter").tablesorter();
+		});
+		function localAjaxReload(){
+			pager('${request.contextPath}/comment/list.html', {account:"${account!''}",checkFlag:"${checkFlag!''}"}, ${total}, page_size,$(".laypage_curr").text());
+			$("input[name='']").attr("checked",false);
+		}
+	</script> 
+	<script>
+			function checks(url){
+				var options = {
+				confirm	: "确认此次操作？",
+				ajaxurl : url
+				};
+				selMultiToRequest(options);
+			};
+		</script>
+@};
+@include("/layout/layout.html",{head:head,content:content,js:js}){}
